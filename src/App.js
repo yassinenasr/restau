@@ -25,15 +25,15 @@ function App() {
         </div>
         <Header />
         <Routes>
-          <Route path="/dingo" element={<Home />} />
-          <Route path="/dingo/signin" element={<Login />} />
-          <Route path="/dingo/signup" element={<Signup />} />
-          <Route path="/dingo/addchef" element={<AddChef />} />
-          <Route path="/dingo/addclient" element={<AddClient />} />
-          <Route path="/dingo/adddish" element={<AddDish />} />
-          <Route path="/dingo/chefs" element={<Chefs />} />
-          <Route path="/dingo/clients" element={<Clients />} />
-          <Route path="/dingo/dishes" element={<Dishes/>} /> 
+          <Route path="/restau" element={<Home />} />
+          <Route path="/restau/signin" element={<Login />} />
+          <Route path="/restau/signup" element={<Signup />} />
+          <Route path="/restau/addchef" element={<AddChef />} />
+          <Route path="/restau/addclient" element={<AddClient />} />
+          <Route path="/restau/adddish" element={<AddDish />} />
+          <Route path="/restau/chefs" element={<Chefs />} />
+          <Route path="/restau/clients" element={<Clients />} />
+          <Route path="/restau/dishes" element={<Dishes/>} /> 
         </Routes>
         
         <Footer />

@@ -14,25 +14,25 @@ export default function Header() {
             <div className="collapse navbar-collapse main-menu-item justify-content-end" id="navbarSupportedContent">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                <NavLink to="/dingo" className="nav-link" >Home</NavLink>
+                <NavLink to="/restau" className="nav-link" >Home</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dingo/chefs" className="nav-link" >Chefs</NavLink>
+                <NavLink to="/restau/chefs" className="nav-link" >Chefs</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dingo/clients" className="nav-link" >Clients</NavLink>
+                <NavLink to="/restau/clients" className="nav-link" >Clients</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dingo/dishes" className="nav-link" >Dishes</NavLink>
+                <NavLink to="/restau/dishes" className="nav-link" >Dishes</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dingo/addchef" className="nav-link" >AddChef</NavLink>
+                <NavLink to="/restau/addchef" className="nav-link" >AddChef</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dingo/addclient" className="nav-link" >AddClient</NavLink>
+                <NavLink to="/restau/addclient" className="nav-link" >AddClient</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dingo/adddish" className="nav-link" >AddDish</NavLink>
+                <NavLink to="/restau/adddish" className="nav-link" >AddDish</NavLink>
                 </li>
               </ul>
             </div>
