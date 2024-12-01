@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/dingo/static/css/main.7eee306d.css",
+    "main.js": "/dingo/static/js/main.b5fdfdb4.js",
+    "static/js/453.ae406732.chunk.js": "/dingo/static/js/453.ae406732.chunk.js",
+    "index.html": "/dingo/index.html",
+    "main.7eee306d.css.map": "/dingo/static/css/main.7eee306d.css.map",
+    "main.b5fdfdb4.js.map": "/dingo/static/js/main.b5fdfdb4.js.map",
+    "453.ae406732.chunk.js.map": "/dingo/static/js/453.ae406732.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7eee306d.css",
+    "static/js/main.b5fdfdb4.js"
+  ]
+}
