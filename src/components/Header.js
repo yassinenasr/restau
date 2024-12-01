@@ -14,25 +14,25 @@ export default function Header() {
             <div className="collapse navbar-collapse main-menu-item justify-content-end" id="navbarSupportedContent">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                <NavLink to="/" className="nav-link" >Home</NavLink>
+                <NavLink to="/dingo" className="nav-link" >Home</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/chefs" className="nav-link" >Chefs</NavLink>
+                <NavLink to="/dingo/chefs" className="nav-link" >Chefs</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/clients" className="nav-link" >Clients</NavLink>
+                <NavLink to="/dingo/clients" className="nav-link" >Clients</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/dishes" className="nav-link" >Dishes</NavLink>
+                <NavLink to="/dingo/dishes" className="nav-link" >Dishes</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/addchef" className="nav-link" >AddChef</NavLink>
+                <NavLink to="/dingo/addchef" className="nav-link" >AddChef</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/addclient" className="nav-link" >AddClient</NavLink>
+                <NavLink to="/dingo/addclient" className="nav-link" >AddClient</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/adddish" className="nav-link" >AddDish</NavLink>
+                <NavLink to="/dingo/adddish" className="nav-link" >AddDish</NavLink>
                 </li>
               </ul>
             </div>
