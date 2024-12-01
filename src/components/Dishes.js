@@ -1,14 +1,18 @@
 import React,{ useEffect ,useState } from 'react';
 export default function Dishes() {
   const [dishes,setDishes]=useState([]);
+  const [loadData , setLoadData]=useState(false);
   useEffect(
     ()=>{
       console.log("Here Dishes ");
       let dishesTab = JSON.parse(localStorage.getItem("dishes")|| "[]");
       console.log("Here all dishes from LS",dishesTab);
-      setDishes(dishesTab);
+      if(dishesTab.length!==0 && !loadData){
+        setDishes(dishesTab);
+        setLoadData(true);
+      }
       console.log("Here dishes state",dishes);
-    }
+    },[dishes,loadData]
   )
   const deleteDish=(dish) => {
     console.log("Here Selected Dish",dish);
@@ -20,6 +24,7 @@ export default function Dishes() {
     }
     localStorage.setItem("dishes",JSON.stringify(dishes));
     setDishes(dishes);
+    setLoadData(true);
   }
   return (
     <div className="site-section section_padding">
@@ -37,14 +42,14 @@ export default function Dishes() {
                   <th>Name</th>
                   <th>Description</th>
                   <th>price</th>
-                  
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 { dishes.map((value,key) => (
                   <tr>
                   <td>{value.dish}</td>
-                  <td><img src={value.image} height={"35px"} ></img></td>
+                  <td><img src={value.image} height={"35px"} alt={"image"+key}></img></td>
                   <td>{value.name}</td>
                   <td>{value.description}</td>
                   <td>{value.price}</td>

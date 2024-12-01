@@ -7,7 +7,7 @@ export default function Header() {
       <div className="row align-items-center">
         <div className="col-lg-12">
           <nav className="navbar navbar-expand-lg navbar-light">
-            <a className="navbar-brand" > <img src="img/logo.png" alt="logo" /> </a>
+            <p className="navbar-brand" > <img src="img/logo.png" alt="logo" /> </p>
              <button  className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon" />
             </button>

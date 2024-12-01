@@ -1,14 +1,22 @@
 import React,{ useEffect ,useState } from 'react'
 export default function Clients() {
   const [clients,setClients]=useState([]);
+  const [loadData , setLoadData]=useState(false);
   useEffect(()=>{
       console.log("Here Clients ");
       let clientsTab = JSON.parse(localStorage.getItem("clients")|| "[]");
       console.log("Here all clients from LS",clientsTab);
-      setClients(clientsTab);
+      if(clientsTab.length!==0 && !loadData){
+        setClients(clientsTab);
+        setLoadData(true);
+      }
       console.log("Here clients state",clients);
-    }
+    },[clients,loadData]
   )
+  useEffect(() => {
+    console.log("Clients updated:", clients);
+    localStorage.setItem("clients", JSON.stringify(clients));
+  }, [clients]);
   const deleteClient=(client) => {
     console.log("Here Selected Client",client);
     for ( let i=0; clients.length>i;i++){
@@ -19,6 +27,7 @@ export default function Clients() {
     }
     localStorage.setItem("clients",JSON.stringify(clients));
     setClients(clients);
+    setLoadData(true);
   }
   return (
     <div className="site-section section_padding  ">
@@ -38,13 +47,14 @@ export default function Clients() {
                   <th>Email</th>
                   <th>Password</th>
                   <th>Adress</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 { clients.map((value,key) => (
                   <tr>
                   <td>{value.client}</td>
-                  <td><img src={value.image} height={"35px"} ></img></td>
+                  <td><img src={value.image} height={"35px"} alt={"image"+key}></img></td>
                   <td>{value.firstname}</td>
                   <td>{value.email}</td>
                   <td>{value.number}</td>

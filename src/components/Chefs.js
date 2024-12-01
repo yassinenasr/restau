@@ -2,14 +2,18 @@
     import React,{ useEffect ,useState } from 'react';
     export default function Chefs() {
       const [chefs,setChefs]=useState([]);
+      const [loadData , setLoadData]=useState(false);
       useEffect(
         ()=>{
           console.log("Here chefs ");
           let chefsTab = JSON.parse(localStorage.getItem("chefs")|| "[]");
           console.log("Here all chefs from LS",chefsTab);
-          setChefs(chefsTab);
+          if(chefsTab.length!==0  && !loadData){
+            setLoadData(true);
+            setChefs(chefsTab);
+          }
           console.log("Here chefs state",chefs);
-        }
+        },[chefs,loadData]
       )
       const deleteChef=(chef) => {
         console.log("Here Selected Dish",chef);
@@ -21,6 +25,7 @@
         }
         localStorage.setItem("chefs",JSON.stringify(chefs));
         setChefs(chefs);
+        setLoadData(false);
       }
       return (
         <div className="site-section section_padding">
@@ -49,7 +54,7 @@
                     { chefs.map((value,key) => (
                       <tr>
                       <td>{value.chef}</td>
-                      <td><img src={value.image} height={"35px"} ></img></td>
+                      <td><img src={value.image} height={"35px"} alt={"image"+key} ></img></td>
                       <td>{value.firstname}</td>
                       <td>{value.lastname}</td>
                       <td>{value.email}</td>
