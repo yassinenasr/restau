@@ -1,5 +1,6 @@
 import React,{  useState } from 'react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function AddDish() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -32,6 +33,7 @@ export default function AddDish() {
         };
     dishes.push(dishObj);
     localStorage.setItem('dishes',JSON.stringify(dishes));
+    toast.success(" Dish "+dishObj.name+" ,Welcome To Dingo!");
    }
    const generateId = (T) =>{
     let max;
@@ -85,6 +87,7 @@ export default function AddDish() {
         </div>
       </div>
     </div>
+    <ToastContainer />
   </section></div>
 
   )

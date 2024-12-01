@@ -1,4 +1,7 @@
 import React,{  useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function AddChef() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -41,10 +44,12 @@ export default function AddChef() {
           exprience:exprience,
           image:image,
           chef:generateId(chefs),
+          
 
         };
     chefs.push(chefObj);
     localStorage.setItem('chefs',JSON.stringify(chefs));
+    toast.success(" Chef "+chefObj.firstname+" "+chefObj.lastname +" ,Welcome To Dingo!");
    }
    const generateId = (T) =>{
     let max;
@@ -118,13 +123,14 @@ export default function AddChef() {
                 
                 </div>
               <div className="regerv_btn">
-                <a href="#" onClick={AddChef } className="btn_4">Add Chef ☺ </a>
+                <a href="#" onClick={AddChef }  className="btn_4">Add Chef ☺ </a>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
+    <ToastContainer /> 
   </section></div>
 
 
