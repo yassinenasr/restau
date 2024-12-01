@@ -17,7 +17,7 @@ export default function Review() {
           <div className="client_review_part owl-carousel">
             <div className="client_review_single media">
               <div className="client_img align-self-center">
-                <img src="img/client/client_1.png" alt />
+                <img src="img/client/client_1.png" alt="client1" />
               </div>
               <div className="client_review_text media-body">
                 <p>Also made from. Give may saying meat there from heaven it lights face had is gathered
@@ -29,7 +29,7 @@ export default function Review() {
             </div>
             <div className="client_review_single media">
               <div className="client_img align-self-center">
-                <img src="img/client/client_1.png " alt />
+                <img src="img/client/client_1.png " alt="client2" />
               </div>
               <div className="client_review_text media-body">
                 <p>Also made from. Give may saying meat there from heaven it lights face had is gathered
@@ -41,7 +41,7 @@ export default function Review() {
             </div>
             <div className="client_review_single media">
               <div className="client_img align-self-center">
-                <img src="img/client/client_1.png" alt />
+                <img src="img/client/client_1.png" alt="client3" />
               </div>
               <div className="client_review_text media-body">
                 <p>Also made from. Give may saying meat there from heaven it lights face had is gathered

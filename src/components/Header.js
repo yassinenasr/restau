@@ -14,7 +14,7 @@ export default function Header() {
             <div className="collapse navbar-collapse main-menu-item justify-content-end" id="navbarSupportedContent">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                <NavLink to="/restau" className="nav-link" >Home</NavLink>
+                <NavLink to="/restau/" className="nav-link" >Home</NavLink>
                 </li>
                 <li className="nav-item">
                 <NavLink to="/restau/chefs" className="nav-link" >Chefs</NavLink>

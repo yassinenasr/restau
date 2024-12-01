@@ -2,7 +2,7 @@
   "name": "restau",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://yassinenasr.github.io/restau",
+  "homepage": "https://yassinenasr.github.io/restau/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -10,6 +10,7 @@
     "react": "^18.3.1",
     "react-audio-player": "^0.17.0",
     "react-dom": "^18.3.1",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^7.0.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
