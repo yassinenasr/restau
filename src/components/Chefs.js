@@ -17,15 +17,28 @@ export default function Chefs() {
   let subtitle;
 
   const [modalIsOpen, setIsOpen] = useState(false);
+  
+  };
+ 
 
-  function openModal() {
+  function openModal(chefName) {
+    // Retrieve the chefs data from local storage
+    const chefs = JSON.parse(localStorage.getItem("chefs") || "[]");
+    // Find the chef by ID
+    const chef = chefs.find((c) => c.id === chefId);
+    if (chef) {
+      // Populate the modal's value state
+      setValue({
+        image: chef.image || "No Image", // Replace with default if no image
+        firstname: chef.firstname || "",
+        lastname: chef.lastname || "",
+        speciality: chef.speciality || "",
+        exprience: chef.exprience || ""
+      });
+    }
     setIsOpen(true);
   }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = '#f00';
-  }
+  
 
   function closeModal() {
     setIsOpen(false);
@@ -119,7 +132,8 @@ export default function Chefs() {
                         <button
                           type="reset"
                           class="cancelbtn btn btn-info  mr-1 "
-                          onClick={openModal}
+                          onClick={() => setEditingChef(chef.id)}
+                          
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -135,6 +149,7 @@ export default function Chefs() {
                         <button
                           type="submit"
                           class="cancelbtn btn btn-success text-white "
+                          onClick={openModal}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -159,20 +174,26 @@ export default function Chefs() {
       </div>
       <Modal
         isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
-      >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
-        <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
+>
+        <button onClick={closeModal} type="reset" >X</button>
         <form>
-          <input />
-          <button>tab navigation</button>
-          <button>stays</button>
-          <button>inside</button>
-          <button>the modal</button>
+        <div className="col-sm-6 col-lg-12 ">
+          <div className="single_blog_item p-3">
+            <div className="single_blog_img p-3 " >
+              {value.image}
+            </div>
+            <div className="single_blog_text text-center">
+              <h3>{value.firstname} {value.lastname}</h3>
+              <p>{value.speciality}</p>
+              <p>{value.exprience}</p>
+
+              
+            </div>
+          </div>
+        </div>
         </form>
       </Modal>
     </div>

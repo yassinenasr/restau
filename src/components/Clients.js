@@ -1,7 +1,32 @@
-import React,{ useEffect ,useState } from 'react'
+import React,{ useEffect ,useState } from 'react';
+import Modal from 'react-modal';
 export default function Clients() {
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
   const [clients,setClients]=useState([]);
   const [loadData , setLoadData]=useState(false);
+  let subtitle;
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    subtitle.style.color = '#f00';
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
   useEffect(()=>{
       console.log("Here Clients ");
       let clientsTab = JSON.parse(localStorage.getItem("clients")|| "[]");
@@ -25,6 +50,7 @@ export default function Clients() {
         break;
       }
     }
+
     localStorage.setItem("clients",JSON.stringify(clients));
     setClients(clients);
     setLoadData(false);
@@ -92,13 +118,14 @@ export default function Clients() {
                             fill="currentColor"
                             class="bi bi-pen"
                             viewBox="0 0 16 16"
-                          >
+                            >
                             <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
                           </svg>
                         </button>
                         <button
                           type="submit"
                           class="cancelbtn btn btn-success text-white "
+                          onClick={openModal}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -121,6 +148,36 @@ export default function Clients() {
           </div>
         </div>
         </div>
+        <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+>
+        <button onClick={closeModal} type="reset" >X</button>
+        <form>
+        <div className="col-sm-6 col-lg-12 ">
+          <div className="single_blog_item p-3">
+            <div className="single_blog_img p-3">
+              <img src="img/team/chefs_2.png" alt=""  />
+            </div>
+            <div className="single_blog_text text-center">
+            <div>
+            </div>
+              <h3>Fred Macyard</h3>
+              <p>Chef Master</p>
+              <div className="social_icon">
+                <a href="#rf"> <i className="ti-facebook" /> </a>
+                <a href="#f"> <i className="ti-twitter-alt" /> </a>
+                <a href="#f"> <i className="ti-instagram" /> </a>
+                <a href="#f"> <i className="ti-skype" /> </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        </form>
+      </Modal>
         </div>
 
   )

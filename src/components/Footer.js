@@ -66,7 +66,7 @@ export default function Footer() {
               <a href="https://www.facebook.com/YassineNasr103g/"><i className="fab fa-facebook-f" /></a>
               <a href="https://www.instagram.com/yassine_nasr07/"><i className="fab fa-instagram" /></a>
               <a href="https://dribbble.com/yassinenasr"><i className="ti-dribbble" /></a>
-              <a href="https://www.behance.net/yassinenasr1"><i className="fab fa-behance" /></a>
+              <a href="https://www.beh      "><i className="fab fa-behance" /></a>
             </div>
           </div>
         </div>
