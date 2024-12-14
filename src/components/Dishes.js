@@ -1,7 +1,29 @@
 import React,{ useEffect ,useState } from 'react';
+import Modal from 'react-modal';
 export default function Dishes() {
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
   const [dishes,setDishes]=useState([]);
   const [loadData , setLoadData]=useState(false);
+  const [selecteddish, setselecteddish] = useState({});
+   const [modalIsOpen, setIsOpen] = useState(false);
+  function openModal(dish) {
+    setselecteddish(dish);
+    setIsOpen(true);
+  }
+
+
+  function closeModal() {
+    setIsOpen(false);
+  }
   useEffect(
     ()=>{
       console.log("Here Dishes ");
@@ -78,6 +100,7 @@ export default function Dishes() {
                         <button
                           type="reset"
                           class="cancelbtn btn btn-info  mr-1 "
+                          
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +116,7 @@ export default function Dishes() {
                         <button
                           type="submit"
                           class="cancelbtn btn btn-success text-white "
+                          onClick={()=> openModal(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -115,6 +139,34 @@ export default function Dishes() {
           </div>
         </div>
         </div>
+        <Modal
+                       isOpen={modalIsOpen}
+                       onRequestClose={closeModal}
+                       style={customStyles}
+                       contentLabel="Example Modal"
+               >
+                       <button onClick={closeModal} type="reset" >X</button>
+                       <form>
+                       <div className="col-sm-6 col-lg-12 ">
+                         <div className="single_blog_item p-3">
+                           <div className="single_blog_img p-3 " >
+                           <img
+                                       src={selecteddish.image}
+                                       height={"200px"}
+                                       alt={"image"}
+                                     ></img>
+                           </div>
+                           <div className="single_blog_text text-center">
+                             <h3>{selecteddish.name} </h3>
+                             <p>{selecteddish.description}</p>
+                             <p>{selecteddish.price}</p>
+                            
+                             
+                           </div>
+                         </div>
+                       </div>
+                       </form>
+                     </Modal>
         </div>
 
   )

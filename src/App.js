@@ -11,6 +11,7 @@ import AddDish from "./components/AddDish";
 import Chefs from "./components/Chefs";
 import Clients from "./components/Clients";
 import Dishes from "./components/Dishes";
+
 function App() {
   return (
     <BrowserRouter>
@@ -33,7 +34,8 @@ function App() {
           <Route path="/restau/adddish" element={<AddDish />} />
           <Route path="/restau/chefs" element={<Chefs />} />
           <Route path="/restau/clients" element={<Clients />} />
-          <Route path="/restau/dishes" element={<Dishes/>} /> 
+          <Route path="/restau/dishes" element={<Dishes/>} />
+          <Route path="/restau/login" element={<Login/>} />  
         </Routes>
         
         <Footer />

@@ -34,6 +34,9 @@ export default function Header() {
                 <li className="nav-item">
                 <NavLink to="/restau/adddish" className="nav-link" >AddDish</NavLink>
                 </li>
+                <li className="nav-item">
+                <NavLink to="/restau/login" className="nav-link" >Login</NavLink>
+                </li>
               </ul>
             </div>
             <div className="menu_btn">

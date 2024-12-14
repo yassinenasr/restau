@@ -1,44 +1,47 @@
 import React, { useEffect, useState } from "react";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 
 const customStyles = {
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
   },
 };
 export default function Chefs() {
   const [chefs, setChefs] = useState([]);
   const [loadData, setLoadData] = useState(false);
-  let subtitle;
-
+  const [selectedchef, setselectedchef] = useState({});
   const [modalIsOpen, setIsOpen] = useState(false);
-  
-  };
- 
+  const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+  function openModifyModal(chef) {
+    setselectedchef(chef);
+    setmodifyIsOpen(true);
+  }
 
-  function openModal(chefName) {
-    // Retrieve the chefs data from local storage
-    const chefs = JSON.parse(localStorage.getItem("chefs") || "[]");
-    // Find the chef by ID
-    const chef = chefs.find((c) => c.id === chefId);
-    if (chef) {
-      // Populate the modal's value state
-      setValue({
-        image: chef.image || "No Image", // Replace with default if no image
-        firstname: chef.firstname || "",
-        lastname: chef.lastname || "",
-        speciality: chef.speciality || "",
-        exprience: chef.exprience || ""
-      });
-    }
+  function Modify(chef) {
+    let chefsTab = JSON.parse(localStorage.getItem("chefs") || "[]");
+
+    chefsTab = chefsTab.map((object) => {
+      if (object.chef === chef.chef) {
+        return chef;
+      }
+      return object;
+    });
+
+    localStorage.setItem("chefs", JSON.stringify(chefsTab));
+  }
+  function closeModifyModal() {
+    setmodifyIsOpen(false);
+  }
+
+  function openModal(chef) {
+    setselectedchef(chef);
     setIsOpen(true);
   }
-  
 
   function closeModal() {
     setIsOpen(false);
@@ -132,8 +135,7 @@ export default function Chefs() {
                         <button
                           type="reset"
                           class="cancelbtn btn btn-info  mr-1 "
-                          onClick={() => setEditingChef(chef.id)}
-                          
+                          onClick={() => openModifyModal(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +151,7 @@ export default function Chefs() {
                         <button
                           type="submit"
                           class="cancelbtn btn btn-success text-white "
-                          onClick={openModal}
+                          onClick={() => openModal(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -177,23 +179,162 @@ export default function Chefs() {
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
->
-        <button onClick={closeModal} type="reset" >X</button>
+      >
+        <button onClick={closeModal} type="reset">
+          X
+        </button>
         <form>
-        <div className="col-sm-6 col-lg-12 ">
-          <div className="single_blog_item p-3">
-            <div className="single_blog_img p-3 " >
-              {value.image}
-            </div>
-            <div className="single_blog_text text-center">
-              <h3>{value.firstname} {value.lastname}</h3>
-              <p>{value.speciality}</p>
-              <p>{value.exprience}</p>
-
-              
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_img p-3 ">
+                <img
+                  src={selectedchef.image}
+                  height={"200px"}
+                  alt={"image"}
+                ></img>
+              </div>
+              <div className="single_blog_text text-center">
+                <h3>
+                  {selectedchef.firstname} {selectedchef.lastname}
+                </h3>
+                <p>{selectedchef.speciality}</p>
+                <p>{selectedchef.exprience}</p>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
+      </Modal>
+      <Modal
+        isOpen={modifyIsOpen}
+        onRequestClose={closeModifyModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModifyModal} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_text text-center">
+                
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="firstname"
+                    value={selectedchef.firstname}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        firstname: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="lastname"
+                    value={selectedchef.lastname}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        lastname: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="number"
+                    value={selectedchef.number}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        number: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="email"
+                    value={selectedchef.email}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        email: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="specialty"
+                    value={selectedchef.speciality}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        speciality: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="adress"
+                    value={selectedchef.adress}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        adress: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={selectedchef.exprience}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        exprience: event.target.value,
+                      }));
+                    }}
+                    id="exprience"
+                    placeholder="FirstName *"
+                  />
+                  <button
+                    type="submit"
+                    class="cancelbtn btn btn-success text-white mt-3"
+                    onClick={() => Modify(selectedchef)}
+                  >
+                    Apply Your Modification
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
       </Modal>
     </div>

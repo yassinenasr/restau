@@ -13,16 +13,14 @@ export default function Clients() {
   };
   const [clients,setClients]=useState([]);
   const [loadData , setLoadData]=useState(false);
-  let subtitle;
+  const [selectedclient, setselectedclient] = useState({})
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  function openModal() {
+  function openModal(client) {
+    setselectedclient(client);
     setIsOpen(true);
   }
 
-  function afterOpenModal() {
-    subtitle.style.color = '#f00';
-  }
 
   function closeModal() {
     setIsOpen(false);
@@ -125,7 +123,7 @@ export default function Clients() {
                         <button
                           type="submit"
                           class="cancelbtn btn btn-success text-white "
-                          onClick={openModal}
+                          onClick={()=> openModal(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -148,36 +146,34 @@ export default function Clients() {
           </div>
         </div>
         </div>
-        <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
->
-        <button onClick={closeModal} type="reset" >X</button>
-        <form>
-        <div className="col-sm-6 col-lg-12 ">
-          <div className="single_blog_item p-3">
-            <div className="single_blog_img p-3">
-              <img src="img/team/chefs_2.png" alt=""  />
-            </div>
-            <div className="single_blog_text text-center">
-            <div>
-            </div>
-              <h3>Fred Macyard</h3>
-              <p>Chef Master</p>
-              <div className="social_icon">
-                <a href="#rf"> <i className="ti-facebook" /> </a>
-                <a href="#f"> <i className="ti-twitter-alt" /> </a>
-                <a href="#f"> <i className="ti-instagram" /> </a>
-                <a href="#f"> <i className="ti-skype" /> </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        </form>
-      </Modal>
+       <Modal
+               isOpen={modalIsOpen}
+               onRequestClose={closeModal}
+               style={customStyles}
+               contentLabel="Example Modal"
+       >
+               <button onClick={closeModal} type="reset" >X</button>
+               <form>
+               <div className="col-sm-6 col-lg-12 ">
+                 <div className="single_blog_item p-3">
+                   <div className="single_blog_img p-3 " >
+                   <img
+                               src={selectedclient.image}
+                               height={"200px"}
+                               alt={"image"}
+                             ></img>
+                   </div>
+                   <div className="single_blog_text text-center">
+                     <h3>{selectedclient.firstname} {selectedclient.lastname}</h3>
+                     <p>{selectedclient.number}</p>
+                     <p>{selectedclient.email}</p>
+                     <p>{selectedclient.Adress}</p>
+                     
+                   </div>
+                 </div>
+               </div>
+               </form>
+             </Modal>
         </div>
 
   )
