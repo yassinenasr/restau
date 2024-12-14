@@ -15,7 +15,27 @@ export default function Clients() {
   const [loadData , setLoadData]=useState(false);
   const [selectedclient, setselectedclient] = useState({})
   const [modalIsOpen, setIsOpen] = useState(false);
-
+  const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+    function openModifyModal(client) {
+      setselectedclient(client);
+      setmodifyIsOpen(true);
+    }
+  
+    function Modify(client) {
+      let clientsTab = JSON.parse(localStorage.getItem("clients") || "[]");
+  
+      clientsTab = clientsTab.map((object) => {
+        if (object.client === client.client) {
+          return client;
+        }
+        return object;
+      });
+  
+      localStorage.setItem("clients", JSON.stringify(clientsTab));
+    }
+    function closeModifyModal() {
+      setmodifyIsOpen(false);
+    }
   function openModal(client) {
     setselectedclient(client);
     setIsOpen(true);
@@ -80,8 +100,8 @@ export default function Clients() {
                   <td>{value.client}</td>
                   <td><img src={value.image} height={"35px"} alt={"image"+key}></img></td>
                   <td>{value.firstname}</td>
+                  <td>{value.lastname}</td>
                   <td>{value.email}</td>
-                  <td>{value.number}</td>
                   <td>{value.password}</td>
                   <td>{value.adress}</td>
                   <td>
@@ -108,6 +128,7 @@ export default function Clients() {
                         <button
                           type="reset"
                           class="cancelbtn btn btn-info  mr-1 "
+                          onClick={() => openModifyModal(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -174,6 +195,97 @@ export default function Clients() {
                </div>
                </form>
              </Modal>
+        <Modal
+                isOpen={modifyIsOpen}
+                onRequestClose={closeModifyModal}
+                style={customStyles}
+                contentLabel="Example Modal"
+              >
+                <button onClick={closeModifyModal} type="reset">
+                  X
+                </button>
+                <form>
+                  <div className="col-sm-6 col-lg-12 ">
+                    <div className="single_blog_item p-3">
+                      <div className="single_blog_text text-center">
+                        
+                        <div className="form-group col-md-12">
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="firstname"
+                            value={selectedclient.firstname}
+                            onChange={(event) => {
+                              setselectedclient((prev) => ({
+                                ...prev,
+                                firstname: event.target.value,
+                              }));
+                            }}
+                            placeholder="FirstName *"
+                          />
+                        </div>
+                        <div className="form-group col-md-12">
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="lastname"
+                            value={selectedclient.lastname}
+                            onChange={(event) => {
+                              setselectedclient((prev) => ({
+                                ...prev,
+                                lastname: event.target.value,
+                              }));
+                            }}
+                            placeholder="FirstName *"
+                          />
+                        </div>
+        
+                       
+                        <div className="form-group col-md-12">
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="email"
+                            value={selectedclient.email}
+                            onChange={(event) => {
+                              setselectedclient((prev) => ({
+                                ...prev,
+                                email: event.target.value,
+                              }));
+                            }}
+                            placeholder="FirstName *"
+                          />
+                        </div>
+        
+                        
+                        
+                        <div className="form-group col-md-12">
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={selectedclient.adress}
+                            onChange={(event) => {
+                              setselectedclient((prev) => ({
+                                ...prev,
+                                adress: event.target.value,
+                              }));
+                            }}
+                            id="exprience"
+                            placeholder="FirstName *"
+                          />
+                          <button
+                            type="submit"
+                            class="cancelbtn btn btn-success text-white mt-3"
+                            onClick={() => Modify(selectedclient)}
+                          >
+                            Apply Your Modification
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </Modal>
         </div>
 
   )

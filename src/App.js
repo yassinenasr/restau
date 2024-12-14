@@ -3,7 +3,7 @@ import Home from "./components/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route , Navigate} from "react-router-dom";
 import Signup from "./components/Signup";
 import AddChef from "./components/AddChef";
 import AddClient from "./components/AddClient";
@@ -14,7 +14,7 @@ import Dishes from "./components/Dishes";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <div className="site-wrap">
         <div className="site-mobile-menu site-navbar-target">
           <div className="site-mobile-menu-header">
@@ -25,7 +25,7 @@ function App() {
           <div className="site-mobile-menu-body" />
         </div>
         <Header />
-        <Routes>
+        <Routes >
           <Route path="/restau/" element={<Home />} />
           <Route path="/restau/signin" element={<Login />} />
           <Route path="/restau/signup" element={<Signup />} />

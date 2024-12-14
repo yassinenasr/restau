@@ -15,6 +15,28 @@ export default function Dishes() {
   const [loadData , setLoadData]=useState(false);
   const [selecteddish, setselecteddish] = useState({});
    const [modalIsOpen, setIsOpen] = useState(false);
+   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+     function openModifyModal(dish) {
+       setselecteddish(dish);
+       setmodifyIsOpen(true);
+     }
+   
+     function Modify(dish) {
+       let dishesTab = JSON.parse(localStorage.getItem("dishes") || "[]");
+   
+       dishesTab = dishesTab.map((object) => {
+         if (object.dish === dish.dish) {
+           return dish;
+         }
+         return object;
+       });
+   
+       localStorage.setItem("dishes", JSON.stringify(dishesTab));
+     }
+     function closeModifyModal() {
+       setmodifyIsOpen(false);
+     }
+     
   function openModal(dish) {
     setselecteddish(dish);
     setIsOpen(true);
@@ -100,6 +122,7 @@ export default function Dishes() {
                         <button
                           type="reset"
                           class="cancelbtn btn btn-info  mr-1 "
+                          onClick={() => openModifyModal(value)}
                           
                         >
                           <svg
@@ -167,6 +190,85 @@ export default function Dishes() {
                        </div>
                        </form>
                      </Modal>
+                     <Modal
+                                     isOpen={modifyIsOpen}
+                                     onRequestClose={closeModifyModal}
+                                     style={customStyles}
+                                     contentLabel="Example Modal"
+                                   >
+                                     <button onClick={closeModifyModal} type="reset">
+                                       X
+                                     </button>
+                                     <form>
+                                       <div className="col-sm-6 col-lg-12 ">
+                                         <div className="single_blog_item p-3">
+                                           <div className="single_blog_text text-center">
+                                             
+                                             <div className="form-group col-md-12">
+                                               <input
+                                                 type="text"
+                                                 className="form-control"
+                                                 id="firstname"
+                                                 value={selecteddish.name}
+                                                 onChange={(event) => {
+                                                   setselecteddish((prev) => ({
+                                                     ...prev,
+                                                     name: event.target.value,
+                                                   }));
+                                                 }}
+                                                 placeholder="FirstName *"
+                                               />
+                                             </div>
+                                             <div className="form-group col-md-12">
+                                               <input
+                                                 type="text"
+                                                 className="form-control"
+                                                 id="lastname"
+                                                 value={selecteddish.description}
+                                                 onChange={(event) => {
+                                                   setselecteddish((prev) => ({
+                                                     ...prev,
+                                                     description: event.target.value,
+                                                   }));
+                                                 }}
+                                                 placeholder="FirstName *"
+                                               />
+                                             </div>
+                             
+                                            
+                                             <div className="form-group col-md-12">
+                                               <input
+                                                 type="text"
+                                                 className="form-control"
+                                                 id="email"
+                                                 value={selecteddish.price}
+                                                 onChange={(event) => {
+                                                   setselecteddish((prev) => ({
+                                                     ...prev,
+                                                     price: event.target.value,
+                                                   }));
+                                                 }}
+                                                 placeholder="FirstName *"
+                                               />
+                                             </div>
+                             
+                                             
+                                             
+                                             <div className="form-group col-md-12">
+                                              
+                                               <button
+                                                 type="submit"
+                                                 class="cancelbtn btn btn-success text-white mt-3"
+                                                 onClick={() => Modify(selecteddish)}
+                                               >
+                                                 Apply Your Modification
+                                               </button>
+                                             </div>
+                                           </div>
+                                         </div>
+                                       </div>
+                                     </form>
+                                   </Modal>
         </div>
 
   )
