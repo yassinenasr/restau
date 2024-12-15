@@ -16,6 +16,7 @@ export default function Clients() {
   const [selectedclient, setselectedclient] = useState({})
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+  
     function openModifyModal(client) {
       setselectedclient(client);
       setmodifyIsOpen(true);
