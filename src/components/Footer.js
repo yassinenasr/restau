@@ -1,6 +1,14 @@
 import React from 'react'
 
 export default function Footer() {
+  const [placeholder, setPlaceholder] = React.useState('Email Address'); 
+  const handleFocus = () => {
+    setPlaceholder(''); 
+  };
+
+  const handleBlur = () => {
+    setPlaceholder('Email Address'); 
+  };
   return (
     <footer className="footer-area">
     <div className="container">
@@ -44,7 +52,7 @@ export default function Footer() {
             <form action="#">
               <div className="form-group">
                 <div className="input-group mb-3">
-                  <input type="text" className="form-control" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" />
+                  <input type="text" className="form-control"  placeholder={placeholder} onFocus={handleFocus} onBlur={handleBlur} />
                   <div className="input-group-append">
                     <button className="btn" type="button"><i className="fas fa-paper-plane" /></button>
                   </div>

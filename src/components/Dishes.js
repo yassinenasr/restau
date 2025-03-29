@@ -1,5 +1,6 @@
 import React,{ useEffect ,useState } from 'react';
 import Modal from 'react-modal';
+import { getAllPlats } from '../services/services';
 export default function Dishes() {
   const customStyles = {
     content: {
@@ -22,8 +23,8 @@ export default function Dishes() {
      }
    
      function Modify(dish) {
-       let dishesTab = JSON.parse(localStorage.getItem("dishes") || "[]");
-   
+       let dishesTab = getAllPlats();
+       console.log("Here dishes tab",dishesTab);
        dishesTab = dishesTab.map((object) => {
          if (object.dish === dish.dish) {
            return dish;
@@ -46,18 +47,28 @@ export default function Dishes() {
   function closeModal() {
     setIsOpen(false);
   }
-  useEffect(
-    ()=>{
-      console.log("Here Dishes ");
-      let dishesTab = JSON.parse(localStorage.getItem("dishes")|| "[]");
-      console.log("Here all dishes from LS",dishesTab);
-      if(dishesTab.length!==0 && !loadData){
+
+  const fetchDishes = async () => {
+    console.log("Getting dishes from backend...");
+    try {
+      let dishesTab = await getAllPlats(); 
+      if (dishesTab.length !== 0 && !loadData) {
         setDishes(dishesTab);
         setLoadData(true);
       }
-      console.log("Here dishes state",dishes);
-    },[dishes,loadData]
-  )
+      console.log("Here dishes state", dishesTab);
+    } catch (error) {
+      console.error("Error fetching dishes:", error);
+    }
+  };
+  
+  useEffect(() => {
+    if (!loadData) { 
+      fetchDishes();
+    }
+  }, [loadData]); 
+  
+  
   const deleteDish=(dish) => {
     console.log("Here Selected Dish",dish);
     for ( let i=0; dishes.length>i;i++){
@@ -91,8 +102,8 @@ export default function Dishes() {
               </thead>
               <tbody>
                 { dishes.map((value,key) => (
-                  <tr>
-                  <td>{value.dish}</td>
+                  <tr key={key}>
+                  <td>{value.id}</td>
                   <td><img src={value.image} height={"35px"} alt={"image"+key}></img></td>
                   <td>{value.name}</td>
                   <td>{value.description}</td>
@@ -102,7 +113,7 @@ export default function Dishes() {
                   <div style={{ display: "flex" }}>
                         <button
                           type="reset"
-                          class="cancelbtn btn btn-danger mr-1  "
+                          className="cancelbtn btn btn-danger mr-1  "
                           onClick={() => {
                             deleteDish(value.dish);
                           }}
@@ -112,7 +123,7 @@ export default function Dishes() {
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-trash"
+                            className="bi bi-trash"
                             viewBox="0 0 16 16"
                           >
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
@@ -121,7 +132,7 @@ export default function Dishes() {
                         </button>
                         <button
                           type="reset"
-                          class="cancelbtn btn btn-info  mr-1 "
+                          className="cancelbtn btn btn-info  mr-1 "
                           onClick={() => openModifyModal(value)}
                           
                         >
@@ -130,7 +141,7 @@ export default function Dishes() {
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-pen"
+                            className="bi bi-pen"
                             viewBox="0 0 16 16"
                           >
                             <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
@@ -138,7 +149,7 @@ export default function Dishes() {
                         </button>
                         <button
                           type="submit"
-                          class="cancelbtn btn btn-success text-white "
+                          className="cancelbtn btn btn-success text-white "
                           onClick={()=> openModal(value)}
                         >
                           <svg
@@ -146,7 +157,7 @@ export default function Dishes() {
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-info-circle"
+                            className="bi bi-info-circle"
                             viewBox="0 0 16 16"
                           >
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -258,7 +269,7 @@ export default function Dishes() {
                                               
                                                <button
                                                  type="submit"
-                                                 class="cancelbtn btn btn-success text-white mt-3"
+                                                 className="cancelbtn btn btn-success text-white mt-3"
                                                  onClick={() => Modify(selecteddish)}
                                                >
                                                  Apply Your Modification
