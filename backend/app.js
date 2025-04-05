@@ -13,20 +13,17 @@ app.use(cors({
     origin: 'http://localhost:3000'
   }));
 const plats = [
-    {id: 1, name :"Pizza Margherita",price :10},
-    {id: 2, name :"Burger Maison",price :8},
-    {id: 3, name :"Pates Carbonara",price :12},];
+    {id: 1,pic :"assets/pics/pizzamargherita.jpg",name :"Pizza Margherita",description : "fine" , price :10},
+    {id: 2,pic:"assets/pics/burgermaison.jpg",name :"Burger Maison",description : "fine",price :8},
+    {id: 3,pic:"assets/pics/patescarbonara.jpg",name :"Pates Carbonara",description :"fine",price :12},];
 //Business logic:get all plats
 app.get('/plats', (req, res) => {
     res.json({ plats: plats });
 });
 //Business logic:get plat by id
 app.get('/plats/:id', (req, res) => {
-    //get id from request
     let platid = req.params.id;
-    //search plat by id
     let foundplat = plats.find((obj) => obj.id == platid);
-    //return response
     res.json({ plat: foundplat });
 });
 //Business logic:search plat by name or price
@@ -60,22 +57,19 @@ app.put("/plats/:id",(req , res )=>{
 );
 //Business logic:add plat
 app.post("/plats", (req, res) => {
-    //get object from request
     let platObj = req.body;
-    //add object to plats(DB)
     plats.push(platObj);
-    //return response
     res.json({ msg: "plat Added with success" });
 });
 const users=[
-    {id:1,nom : "ali", tel:24600900},
-    {id:1,nom : "mohamed", tel:23129129},
-    {id:1,nom : "karim", tel:25123123},
+    {client:1,image :"assets/pics/ab.jpg",firstname : "ali",lastname:"badra" ,email:"ab@gmail.com",password:"alibadra123",adress:24600900},
+    {client:6,image :"assets/pics/mf.jpg",firstname : "mohamed",lastname:"frikha" ,email : "mf@gmail.com",password:"mofrikha123",adress:23129129},
+    {client:5,image :"assets/pics/kk.jpg",firstname : "karim",lastname:"khemiri" ,email: " kk@gmail.com ",password:"karim123" ,adress:25123123},
 ];   
 //Business logic : search user by tel
 app.get("/users/search",(req,res)   =>{
     let search = req.query.search;
-    let foundusers = users.filter((obj) => obj.tel == search);
+    let foundusers = users.filter((obj) => obj.adress == search);
     res.json({users:foundusers});
 }
 );
@@ -85,9 +79,9 @@ app.get("/users",(req,res)   =>{
 }
 );
 //Business logic: delete user by name
-app.delete("/users/:nom",(req,res)   =>{
-    let nom = req.params.nom;
-    let founduser = users.find((obj) => obj.nom == nom);
+app.delete("/users/:firstname",(req,res)   =>{
+    let firstname = req.params.firstname;
+    let founduser = users.find((obj) => obj.firstname == firstname);
     let index = users.indexOf(founduser);
     users.splice(index,1);
     res.json({msg:"user deleted"});
@@ -136,4 +130,65 @@ app.get("/orders/sum/:platid",(req,res)   =>{
     res.json({sum:sum});
 }
 );
+const chefs=[
+    {chef:"1", image :"assets/pics/chefs1.jpg",FirstName:"Ali",LastName:"dridri",Email:"alidriri@gmail.com",Tel:24600900,Password:"alidriri123",Adress:"Tunis",Speciality:"Pasta",Exprience:"5 years"},
+    {chef:"2", image :"assets/pics/chefs2.jpg",FirstName:"Ammar",LastName:"zakkar",Email:"zakkar@gmail.com",Tel:21489900,Password:"fazfazfaf",Adress:"Gbeli",Speciality:"Omlette",Exprience:"0.5 years"},
+    {chef:"3", image :"assets/pics/chefs3.jpg",FirstName:"Antar",LastName:"darbouka",Email:"antar@gmail.com",Tel:97852963,Password:"gagaga",Adress:"Kef",Speciality:"CousCous",Exprience:"20 years"},]
+    //Business logic : get all chefs
+app.get("/chefs",(req,res)   =>{
+    res.json({chefs:chefs});
+}
+);
+//Business logic : delete chef by ID
+app.delete("/chefs/:id",(req,res)   =>{
+    let id = req.params.id;
+    let foundchef = chefs.find((obj) => obj.chef == id);
+    let index = chefs.indexOf(foundchef);
+    chefs.splice(index,1);
+    res.json({msg:"chef deleted"});
+}
+);
+//Business logic : add chef
+app.post("/chefs",(req,res)   =>{
+    let chefObj = req.body;
+    chefs.push(chefObj);
+    res.json({msg:"chef added"});
+}
+);
+//Business logic : search chef by name or speciality*
+app.get("/chefs/search",(req,res)   =>{
+    let search = req.query.search;
+    let foundchefs = chefs.filter((obj) => obj.FirstName.includes(search) || obj.Speciality == search);
+    res.json({chefs:foundchefs});
+}
+);
+//Business logic : update chef by ID
+app.put("/chefs/:id",(req,res)   =>{
+    let id = req.params.id;
+    let foundchef = chefs.find((obj) => obj.chef == id);
+    foundchef.FirstName = req.body.FirstName;
+    foundchef.LastName = req.body.LastName;
+    foundchef.Email = req.body.Email;
+    foundchef.Tel = req.body.Tel;
+    foundchef.Password = req.body.Password;
+    foundchef.Adress = req.body.Adress;
+    foundchef.Speciality = req.body.Speciality;
+    foundchef.Exprience = req.body.Exprience;
+    res.json({msg:"chef updated"});
+}
+);
+//Business logic : get chef by ID
+app.get("/chefs/:id",(req,res)   =>{
+    let id = req.params.id;
+    let foundchef = chefs.find((obj) => obj.chef == id);
+    res.json({chef:foundchef});
+}
+);
+//business logic : delete all chefs
+app.delete("/chefs",(req,res)   =>{
+    chefs.splice(0,chefs.length);
+    res.json({msg:"All chefs deleted"});
+}
+);
+
 module.exports = app;

@@ -1,5 +1,7 @@
 import React,{ useEffect ,useState } from 'react';
 import Modal from 'react-modal';
+import { getAllUsers } from '../services/services';
+import { deleteAllUsers } from '../services/services';
 export default function Clients() {
   const customStyles = {
     content: {
@@ -11,12 +13,18 @@ export default function Clients() {
       transform: 'translate(-50%, -50%)',
     },
   };
+  const [deleteIsOpen, setdeleteIsOpen] = useState(false);
   const [clients,setClients]=useState([]);
   const [loadData , setLoadData]=useState(false);
   const [selectedclient, setselectedclient] = useState({})
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
-  
+  function openModalD() {
+    setdeleteIsOpen(true);
+  }
+  function closeModalD() {
+    setdeleteIsOpen(false);
+  }
     function openModifyModal(client) {
       setselectedclient(client);
       setmodifyIsOpen(true);
@@ -46,17 +54,25 @@ export default function Clients() {
   function closeModal() {
     setIsOpen(false);
   }
-  useEffect(()=>{
-      console.log("Here Clients ");
-      let clientsTab = JSON.parse(localStorage.getItem("clients")|| "[]");
-      console.log("Here all clients from LS",clientsTab);
-      if(clientsTab.length!==0 && !loadData){
-        setClients(clientsTab);
-        setLoadData(true);
+  const fetchClients = async () => {
+      console.log("Getting Clients from backend...");
+      try {
+        let clientsTab = await getAllUsers();
+        if (clientsTab.length !== 0 && !loadData) {
+          setClients(clientsTab);
+          setLoadData(true);
+        }
+        console.log("Here clients state", clientsTab);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
       }
-      console.log("Here clients state",clients);
-    },[clients,loadData]
-  )
+    };
+  
+    useEffect(() => {
+      if (!loadData) {
+        fetchClients();
+      }
+    }, [loadData]);
   useEffect(() => {
     console.log("Clients updated:", clients);
     localStorage.setItem("clients", JSON.stringify(clients));
@@ -74,6 +90,17 @@ export default function Clients() {
     setClients(clients);
     setLoadData(false);
   }
+  async function deleteAllClients(event) {
+      console.log("Deleting all dishes...");
+      try {
+        event.preventDefault();
+        setClients([]);
+        await deleteAllUsers();
+        setdeleteIsOpen(false);
+      } catch (error) {
+        console.error("Error deleting dishes:", error);
+      }
+    }
   return (
     <div className="site-section section_padding  ">
     <div className="container col-lg-12 ">
@@ -81,6 +108,34 @@ export default function Clients() {
     <div className="section_tittle ">
             <h2>Our Clients</h2>
           </div>
+          <div className="container mt-4">
+            <div className="row justify-content-center">
+              <div className="col-12 col-md-6 mb-3">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fas fa-search"></i>
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search..."
+                    aria-label="Search"
+                    id="searchInput"
+                    
+              
+                    
+                  />
+                  <button
+                    type="reset"
+                    className="cancelbtn btn btn-danger  ml-5 "
+                    onClick={openModalD}
+                  >
+                    Delete All Clients
+                  </button> 
+                  </div> </div> </div>    </div>
           <div className="widget-next-match  ">
             <table className="table custom-table  ">
               <thead>
@@ -168,6 +223,39 @@ export default function Clients() {
           </div>
         </div>
         </div>
+         <Modal
+                 isOpen={deleteIsOpen}
+                 onRequestClose={closeModalD}
+                 style={customStyles}
+                 appElement={document.getElementById("root")}
+                 contentLabel="Example Modal"
+               >
+                 <button onClick={closeModalD} type="reset">
+                   X
+                 </button>
+                 <form>
+                   <div className="col-sm-6 col-lg-12 ">
+                     <div className="single_blog_item p-3">
+                       <div className="single_blog_text text-center">
+                         <h3>Are you sure you want to delete all Clients ?</h3>
+                         <button
+         
+                           className="cancelbtn btn btn-success text-white mt-3 mr-3"
+                           onClick={deleteAllClients}
+                         >
+                           Yes
+                         </button>
+                         <button
+                           className="cancelbtn btn btn-danger text-white mt-3"
+                           onClick={closeModal}
+                         >
+                           Cancel
+                         </button>
+                       </div>
+                     </div>
+                   </div>
+                 </form>
+               </Modal>     
        <Modal
                isOpen={modalIsOpen}
                onRequestClose={closeModal}

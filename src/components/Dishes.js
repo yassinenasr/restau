@@ -1,49 +1,119 @@
-import React,{ useEffect ,useState } from 'react';
-import Modal from 'react-modal';
-import { getAllPlats } from '../services/services';
+import React, { useEffect, useState } from "react";
+import Modal from "react-modal";
+import {
+  getAllPlats,
+  getplatbyid,
+  deleteAllPlats,
+  deleteplatbyid,
+} from "../services/services";
+Modal.setAppElement("#root");
+
+
 export default function Dishes() {
   const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
     },
   };
-  const [dishes,setDishes]=useState([]);
-  const [loadData , setLoadData]=useState(false);
+  const [dishes, setDishes] = useState([]);
+  const [loadData, setLoadData] = useState(false);
   const [selecteddish, setselecteddish] = useState({});
-   const [modalIsOpen, setIsOpen] = useState(false);
-   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
-     function openModifyModal(dish) {
-       setselecteddish(dish);
-       setmodifyIsOpen(true);
-     }
-   
-     function Modify(dish) {
-       let dishesTab = getAllPlats();
-       console.log("Here dishes tab",dishesTab);
-       dishesTab = dishesTab.map((object) => {
-         if (object.dish === dish.dish) {
-           return dish;
-         }
-         return object;
-       });
-   
-       localStorage.setItem("dishes", JSON.stringify(dishesTab));
-     }
-     function closeModifyModal() {
-       setmodifyIsOpen(false);
-     }
-     
-  function openModal(dish) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [deleteIsOpen, setdeleteIsOpen] = useState(false);
+  const [deleteEIsOpen, setdeleteEIsOpen] = useState(false);
+  const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+ 
+  function openModifyModal(dish) {
     setselecteddish(dish);
-    setIsOpen(true);
+    setmodifyIsOpen(true);
+  }
+  function openModalDe(dish) {
+    setselecteddish(dish)
+    setdeleteEIsOpen(true);
+  }
+  function closeModalDe() {
+    setdeleteEIsOpen(false);
+  }
+async function deletebyid(event) {
+  try {
+    event.preventDefault();
+    const updatedDishes = dishes.filter(dish => dish.id !== selecteddish.id);
+    await deleteplatbyid(selecteddish.id);
+    console.log("Here is the new Dishes tab", updatedDishes);
+    setDishes(updatedDishes);
+    setdeleteEIsOpen(false);
+  } catch (error) {
+    console.error("Error deleting dish by id:", error);
+  }
+}
+async function deletebyid(event) {
+  try {
+    event.preventDefault();
+    const updatedDishes = dishes.filter(dish => dish.id !== selecteddish.id);
+    await deleteplatbyid(selecteddish.id);
+    console.log("Here is the new Dishes tab", updatedDishes);
+    setDishes(updatedDishes);
+    setdeleteEIsOpen(false);
+  } catch (error) {
+    console.error("Error deleting dish by id:", error);
+  }
+}
+
+  async function deleteAllDishes(event) {
+    console.log("Deleting all dishes...");
+    try {
+      event.preventDefault();
+      setDishes([]);
+      await deleteAllPlats();
+      setdeleteIsOpen(false);
+    } catch (error) {
+      console.error("Error deleting dishes:", error);
+    }
   }
 
+  function Modify(dish) {
+    let dishesTab = getAllPlats();
+    console.log("Here dishes tab", dishesTab);
+    dishesTab = dishesTab.map((object) => {
+      if (object.dish === dish.dish) {
+        return dish;
+      }
+      return object;
+    });
 
+    localStorage.setItem("dishes", JSON.stringify(dishesTab));
+  }
+  function closeModifyModal() {
+    setmodifyIsOpen(false);
+  }
+
+  const fetchDisheById = async (id) => {
+    console.log("Getting dish with id " + id + " from backend...");
+    try {
+      let dish = await getplatbyid(id);
+
+      console.log("dish result", dish);
+      setselecteddish(dish);
+    } catch (error) {
+      console.error("Error fetching dishes:", error);
+    }
+  };
+
+  async function openModal(id) {
+    await fetchDisheById(id);
+    setIsOpen(true);
+  }
+  function openModalD() {
+    setdeleteIsOpen(true);
+  }
+  function closeModalD() {
+    setdeleteIsOpen(false);
+  }
   function closeModal() {
     setIsOpen(false);
   }
@@ -51,7 +121,7 @@ export default function Dishes() {
   const fetchDishes = async () => {
     console.log("Getting dishes from backend...");
     try {
-      let dishesTab = await getAllPlats(); 
+      let dishesTab = await getAllPlats();
       if (dishesTab.length !== 0 && !loadData) {
         setDishes(dishesTab);
         setLoadData(true);
@@ -61,39 +131,59 @@ export default function Dishes() {
       console.error("Error fetching dishes:", error);
     }
   };
-  
+
   useEffect(() => {
-    if (!loadData) { 
+    if (!loadData) {
       fetchDishes();
     }
-  }, [loadData]); 
-  
-  
-  const deleteDish=(dish) => {
-    console.log("Here Selected Dish",dish);
-    for ( let i=0; dishes.length>i;i++){
-      if(dishes[i].dish === dish){
-        dishes.splice(i,1);
-        break;
-      }
-    }
-    localStorage.setItem("dishes",JSON.stringify(dishes));
-    setDishes(dishes);
-    setLoadData(false);
-  }
+  }, [loadData]);
   return (
     <div className="site-section section_padding">
-    <div className="container">
-    <div className="col-lg-12 ">
-    <div className="section_tittle">
+      <div className="container">
+        <div className="col-lg-12 ">
+          <div className="section_tittle">
             <h2>Our Dishes</h2>
           </div>
+          {/*add filter field*/}
+
+          <div className="container mt-4">
+            <div className="row justify-content-center">
+              <div className="col-12 col-md-6 mb-3">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fas fa-search"></i>
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search..."
+                    aria-label="Search"
+                    id="searchInput"
+                    
+              
+                    
+                  />
+                  <button
+                    type="reset"
+                    className="cancelbtn btn btn-danger  ml-5 "
+                    onClick={openModalD}
+                  >
+                    Delete All Dishes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="widget-next-match">
             <table className="table custom-table">
               <thead>
                 <tr>
-                <th>Dish</th>
-                <th>Image</th>
+                  <th>Dish</th>
+                  <th>Image</th>
                   <th>Name</th>
                   <th>Description</th>
                   <th>price</th>
@@ -101,22 +191,26 @@ export default function Dishes() {
                 </tr>
               </thead>
               <tbody>
-                { dishes.map((value,key) => (
+                {dishes.map((value, key) => (
                   <tr key={key}>
-                  <td>{value.id}</td>
-                  <td><img src={value.image} height={"35px"} alt={"image"+key}></img></td>
-                  <td>{value.name}</td>
-                  <td>{value.description}</td>
-                  <td>{value.price}</td>
-                  
-                  <td>
-                  <div style={{ display: "flex" }}>
+                    <td>{value.id}</td>
+                    <td>
+                      <img
+                        src={value.pic}
+                        height={"35px"}
+                        alt={"image" + key}
+                      ></img>
+                    </td>
+                    <td>{value.name}</td>
+                    <td>{value.description}</td>
+                    <td>{value.price}</td>
+
+                    <td>
+                      <div style={{ display: "flex" }}>
                         <button
                           type="reset"
                           className="cancelbtn btn btn-danger mr-1  "
-                          onClick={() => {
-                            deleteDish(value.dish);
-                          }}
+                          onClick={()=>openModalDe(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +228,6 @@ export default function Dishes() {
                           type="reset"
                           className="cancelbtn btn btn-info  mr-1 "
                           onClick={() => openModifyModal(value)}
-                          
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +243,7 @@ export default function Dishes() {
                         <button
                           type="submit"
                           className="cancelbtn btn btn-success text-white "
-                          onClick={()=> openModal(value)}
+                          onClick={() => openModal(value.id)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -165,122 +258,184 @@ export default function Dishes() {
                           </svg>
                         </button>
                       </div>
-                  </td> 
-                  </tr>))
-                }
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
-        </div>
-        <Modal
-                       isOpen={modalIsOpen}
-                       onRequestClose={closeModal}
-                       style={customStyles}
-                       contentLabel="Example Modal"
-               >
-                       <button onClick={closeModal} type="reset" >X</button>
-                       <form>
-                       <div className="col-sm-6 col-lg-12 ">
-                         <div className="single_blog_item p-3">
-                           <div className="single_blog_img p-3 " >
-                           <img
-                                       src={selecteddish.image}
-                                       height={"200px"}
-                                       alt={"image"}
-                                     ></img>
-                           </div>
-                           <div className="single_blog_text text-center">
-                             <h3>{selecteddish.name} </h3>
-                             <p>{selecteddish.description}</p>
-                             <p>{selecteddish.price}</p>
-                            
-                             
-                           </div>
-                         </div>
-                       </div>
-                       </form>
-                     </Modal>
-                     <Modal
-                                     isOpen={modifyIsOpen}
-                                     onRequestClose={closeModifyModal}
-                                     style={customStyles}
-                                     contentLabel="Example Modal"
-                                   >
-                                     <button onClick={closeModifyModal} type="reset">
-                                       X
-                                     </button>
-                                     <form>
-                                       <div className="col-sm-6 col-lg-12 ">
-                                         <div className="single_blog_item p-3">
-                                           <div className="single_blog_text text-center">
-                                             
-                                             <div className="form-group col-md-12">
-                                               <input
-                                                 type="text"
-                                                 className="form-control"
-                                                 id="firstname"
-                                                 value={selecteddish.name}
-                                                 onChange={(event) => {
-                                                   setselecteddish((prev) => ({
-                                                     ...prev,
-                                                     name: event.target.value,
-                                                   }));
-                                                 }}
-                                                 placeholder="FirstName *"
-                                               />
-                                             </div>
-                                             <div className="form-group col-md-12">
-                                               <input
-                                                 type="text"
-                                                 className="form-control"
-                                                 id="lastname"
-                                                 value={selecteddish.description}
-                                                 onChange={(event) => {
-                                                   setselecteddish((prev) => ({
-                                                     ...prev,
-                                                     description: event.target.value,
-                                                   }));
-                                                 }}
-                                                 placeholder="FirstName *"
-                                               />
-                                             </div>
-                             
-                                            
-                                             <div className="form-group col-md-12">
-                                               <input
-                                                 type="text"
-                                                 className="form-control"
-                                                 id="email"
-                                                 value={selecteddish.price}
-                                                 onChange={(event) => {
-                                                   setselecteddish((prev) => ({
-                                                     ...prev,
-                                                     price: event.target.value,
-                                                   }));
-                                                 }}
-                                                 placeholder="FirstName *"
-                                               />
-                                             </div>
-                             
-                                             
-                                             
-                                             <div className="form-group col-md-12">
-                                              
-                                               <button
-                                                 type="submit"
-                                                 className="cancelbtn btn btn-success text-white mt-3"
-                                                 onClick={() => Modify(selecteddish)}
-                                               >
-                                                 Apply Your Modification
-                                               </button>
-                                             </div>
-                                           </div>
-                                         </div>
-                                       </div>
-                                     </form>
-                                   </Modal>
-        </div>
+      </div>
+      <Modal
+        isOpen={deleteEIsOpen}
+        onRequestClose={closeModalDe}
+        style={customStyles}
+        appElement={document.getElementById("root")}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModalDe} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_text text-center">
+                <h3>Are you sure you want to delete this dish ?</h3>
+                <button
+                  className="cancelbtn btn btn-success text-white mt-3 mr-3"
+                  onClick={deletebyid}
+                >
+                  Yes
+                </button>
+                <button
+                  className="cancelbtn btn btn-danger text-white mt-3"
+                  onClick={closeModalDe}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
+      <Modal
+        isOpen={deleteIsOpen}
+        onRequestClose={closeModalD}
+        style={customStyles}
+        appElement={document.getElementById("root")}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModalD} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_text text-center">
+                <h3>Are you sure you want to delete all dishes ?</h3>
+                <button
 
-  )
+                  className="cancelbtn btn btn-success text-white mt-3 mr-3"
+                  onClick={deleteAllDishes}
+                >
+                  Yes
+                </button>
+                <button
+                  className="cancelbtn btn btn-danger text-white mt-3"
+                  onClick={closeModal}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        appElement={document.getElementById("root")}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModal} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_img p-3 ">
+                <img
+                  src={selecteddish.pic}
+                  height={"350px"}
+                  width={"500px"}
+                  alt={"image"}
+                ></img>
+              </div>
+              <div className="single_blog_text text-center">
+                <h3>{selecteddish.name} </h3>
+                <p>{selecteddish.description}</p>
+                <p>{selecteddish.price}</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
+      <Modal
+        isOpen={modifyIsOpen}
+        onRequestClose={closeModifyModal}
+        style={customStyles}
+        appElement={document.getElementById("root")}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModifyModal} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_text text-center">
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="firstname"
+                    value={selecteddish.name}
+                    onChange={(event) => {
+                      setselecteddish((prev) => ({
+                        ...prev,
+                        name: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="lastname"
+                    value={selecteddish.description}
+                    onChange={(event) => {
+                      setselecteddish((prev) => ({
+                        ...prev,
+                        description: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="email"
+                    value={selecteddish.price}
+                    onChange={(event) => {
+                      setselecteddish((prev) => ({
+                        ...prev,
+                        price: event.target.value,
+                      }));
+                    }}
+                    placeholder="FirstName *"
+                  />
+                </div>
+
+                <div className="form-group col-md-12">
+                  <button
+                    type="submit"
+                    className="cancelbtn btn btn-success text-white mt-3"
+                    onClick={() => Modify(selecteddish)}
+                  >
+                    Apply Your Modification
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  );
 }

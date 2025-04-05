@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-
+import { getAllChefs } from "../services/services";
 const customStyles = {
   content: {
     top: "50%",
@@ -46,16 +46,7 @@ export default function Chefs() {
   function closeModal() {
     setIsOpen(false);
   }
-  useEffect(() => {
-    console.log("Here chefs ");
-    let chefsTab = JSON.parse(localStorage.getItem("chefs") || "[]");
-    console.log("Here all chefs from LS", chefsTab);
-    if (chefsTab.length !== 0 && !loadData) {
-      setLoadData(true);
-      setChefs(chefsTab);
-    }
-    console.log("Here chefs state", chefs);
-  }, [chefs, loadData]);
+ 
   const deleteChef = (chef) => {
     console.log("Here Selected Dish", chef);
     for (let i = 0; chefs.length > i; i++) {
@@ -68,12 +59,62 @@ export default function Chefs() {
     setChefs(chefs);
     setLoadData(false);
   };
+  const fetchChefs = async () => {
+      console.log("Getting chefs from backend...");
+      try {
+        let chefsTab = await getAllChefs();
+        if (chefsTab.length !== 0 && !loadData) {
+          setChefs(chefsTab);
+          setLoadData(true);
+        }
+        console.log("Here chefs state", chefsTab);
+      } catch (error) {
+        console.error("Error fetching chefs:", error);
+      }
+    };
+  
+    useEffect(() => {
+      if (!loadData) {
+        fetchChefs();
+      }
+    }, [loadData]);
   return (
     <div className="site-section section_padding">
       <div className="container col-lg-12">
         <div className="col-lg-12">
           <div className="section_tittle">
             <h2>Our Chefs</h2>
+          </div>
+          <div className="container mt-4">
+            <div className="row justify-content-center">
+              <div className="col-12 col-md-6 mb-3">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fas fa-search"></i>
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search..."
+                    aria-label="Search"
+                    id="searchInput"
+                    
+              
+                    
+                  />
+                  <button
+                    type="reset"
+                    className="cancelbtn btn btn-danger  ml-5 "
+                    
+                  >
+                    Delete All Chefs
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="widget-next-match">
             <table className="table custom-table  ">
@@ -103,14 +144,14 @@ export default function Chefs() {
                         alt={"image" + key}
                       ></img>
                     </td>
-                    <td>{value.firstname}</td>
-                    <td>{value.lastname}</td>
-                    <td>{value.email}</td>
-                    <td>{value.number}</td>
-                    <td>{value.password}</td>
-                    <td>{value.adress}</td>
-                    <td>{value.speciality}</td>
-                    <td>{value.exprience}</td>
+                    <td>{value.FirstName}</td>
+                    <td>{value.LastName}</td>
+                    <td>{value.Email}</td>
+                    <td>{value.Tel}</td>
+                    <td>{value.Password}</td>
+                    <td>{value.Adress}</td>
+                    <td>{value.Speciality}</td>
+                    <td>{value.Exprience}</td>
                     <td>
                       <div style={{ display: "flex" }}>
                         <button
