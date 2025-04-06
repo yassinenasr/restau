@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { getAllChefs } from "../services/services";
+import {
+  getAllChefs,
+  deleteAllChefs,
+  deletechefbyid,
+  searchForChef,
+} from "../services/services";
 const customStyles = {
   content: {
     top: "50%",
@@ -11,17 +16,70 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
+
 export default function Chefs() {
   const [chefs, setChefs] = useState([]);
   const [loadData, setLoadData] = useState(false);
   const [selectedchef, setselectedchef] = useState({});
+  const [deleteIsOpen, setdeleteIsOpen] = useState(false);
+  const [deleteEIsOpen, setdeleteEIsOpen] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+  const [image, setImage] = useState(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+    }
+  };
+   async function search(value) {
+      try {
+          let filtredChefs= await searchForChef(value);
+          setChefs(filtredChefs);
+      } catch (error) {
+        console.error("Error deleting Clients:", error);
+      }
+    }
   function openModifyModal(chef) {
     setselectedchef(chef);
     setmodifyIsOpen(true);
   }
-
+  async function deleteAllChef(event) {
+    console.log("Deleting all dishes...");
+    try {
+      event.preventDefault();
+      setChefs([]);
+      await deleteAllChefs();
+      setdeleteIsOpen(false);
+    } catch (error) {
+      console.error("Error deleting Chefs:", error);
+    }
+  }
+  async function deletebyid(event) {
+    try {
+      event.preventDefault();
+      const updatedChefs = chefs.filter(
+        (chef) => chef.chef !== selectedchef.chef
+      );
+      await deletechefbyid(selectedchef.chef);
+      console.log("Here is the new Dishes tab", updatedChefs);
+      setChefs(updatedChefs);
+      setdeleteEIsOpen(false);
+    } catch (error) {
+      console.error("Error deleting chef by id:", error);
+    }
+  }
+  function openModalDe(chef) {
+    setselectedchef(chef);
+    setdeleteEIsOpen(true);
+  }
+  function closeModalDe() {
+    setdeleteEIsOpen(false);
+  }
   function Modify(chef) {
     let chefsTab = JSON.parse(localStorage.getItem("chefs") || "[]");
 
@@ -46,7 +104,7 @@ export default function Chefs() {
   function closeModal() {
     setIsOpen(false);
   }
- 
+
   const deleteChef = (chef) => {
     console.log("Here Selected Dish", chef);
     for (let i = 0; chefs.length > i; i++) {
@@ -60,24 +118,30 @@ export default function Chefs() {
     setLoadData(false);
   };
   const fetchChefs = async () => {
-      console.log("Getting chefs from backend...");
-      try {
-        let chefsTab = await getAllChefs();
-        if (chefsTab.length !== 0 && !loadData) {
-          setChefs(chefsTab);
-          setLoadData(true);
-        }
-        console.log("Here chefs state", chefsTab);
-      } catch (error) {
-        console.error("Error fetching chefs:", error);
+    console.log("Getting chefs from backend...");
+    try {
+      let chefsTab = await getAllChefs();
+      if (chefsTab.length !== 0 && !loadData) {
+        setChefs(chefsTab);
+        setLoadData(true);
       }
-    };
-  
-    useEffect(() => {
-      if (!loadData) {
-        fetchChefs();
-      }
-    }, [loadData]);
+      console.log("Here chefs state", chefsTab);
+    } catch (error) {
+      console.error("Error fetching chefs:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!loadData) {
+      fetchChefs();
+    }
+  }, [loadData]);
+  function openModalD() {
+    setdeleteIsOpen(true);
+  }
+  function closeModalD() {
+    setdeleteIsOpen(false);
+  }
   return (
     <div className="site-section section_padding">
       <div className="container col-lg-12">
@@ -101,14 +165,15 @@ export default function Chefs() {
                     placeholder="Search..."
                     aria-label="Search"
                     id="searchInput"
-                    
-              
-                    
+                    onChange  ={(event) => {
+                      const searchTerm = event.target.value.toLowerCase();
+                      search(searchTerm);
+                    }}
                   />
                   <button
                     type="reset"
                     className="cancelbtn btn btn-danger  ml-5 "
-                    
+                    onClick={openModalD}
                   >
                     Delete All Chefs
                   </button>
@@ -120,7 +185,6 @@ export default function Chefs() {
             <table className="table custom-table  ">
               <thead>
                 <tr>
-                  <th>Chef</th>
                   <th>Image</th>
                   <th>FirstName</th>
                   <th>LastName</th>
@@ -130,13 +194,12 @@ export default function Chefs() {
                   <th>Adress</th>
                   <th>Speciality</th>
                   <th>Experience</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {chefs.map((value, key) => (
-                  <tr>
-                    <td>{value.chef}</td>
+                  <tr key={key}>
                     <td>
                       <img
                         src={value.image}
@@ -157,9 +220,7 @@ export default function Chefs() {
                         <button
                           type="reset"
                           className="cancelbtn btn btn-danger mr-1  "
-                          onClick={() => {
-                            deleteChef(value.chef);
-                          }}
+                          onClick={() => openModalDe(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -216,6 +277,70 @@ export default function Chefs() {
         </div>
       </div>
       <Modal
+        isOpen={deleteEIsOpen}
+        onRequestClose={closeModalDe}
+        style={customStyles}
+        appElement={document.getElementById("root")}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModalDe} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_text text-center">
+                <h3>Are you sure you want to delete this chef ?</h3>
+                <button
+                  className="cancelbtn btn btn-success text-white mt-3 mr-3"
+                  onClick={deletebyid}
+                >
+                  Yes
+                </button>
+                <button
+                  className="cancelbtn btn btn-danger text-white mt-3"
+                  onClick={closeModalDe}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
+      <Modal
+        isOpen={deleteIsOpen}
+        onRequestClose={closeModalD}
+        style={customStyles}
+        appElement={document.getElementById("root")}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModalD} type="reset">
+          X
+        </button>
+        <form>
+          <div className="col-sm-6 col-lg-12 ">
+            <div className="single_blog_item p-3">
+              <div className="single_blog_text text-center">
+                <h3>Are you sure you want to delete all chefs ?</h3>
+                <button
+                  className="cancelbtn btn btn-success text-white mt-3 mr-3"
+                  onClick={deleteAllChef}
+                >
+                  Yes
+                </button>
+                <button
+                  className="cancelbtn btn btn-danger text-white mt-3"
+                  onClick={closeModalD}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
+      <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
@@ -236,10 +361,10 @@ export default function Chefs() {
               </div>
               <div className="single_blog_text text-center">
                 <h3>
-                  {selectedchef.firstname} {selectedchef.lastname}
+                  {selectedchef.FirstName} {selectedchef.LastName}
                 </h3>
-                <p>{selectedchef.speciality}</p>
-                <p>{selectedchef.exprience}</p>
+                <p>{selectedchef.Speciality}</p>
+                <p>{selectedchef.Experience}</p>
               </div>
             </div>
           </div>
@@ -258,7 +383,7 @@ export default function Chefs() {
           <div className="col-sm-6 col-lg-12 ">
             <div className="single_blog_item p-3">
               <div className="single_blog_text text-center">
-                
+              
                 <div className="form-group col-md-12">
                   <input
                     type="text"
@@ -274,6 +399,7 @@ export default function Chefs() {
                     placeholder="FirstName *"
                   />
                 </div>
+                
                 <div className="form-group col-md-12">
                   <input
                     type="text"
@@ -286,28 +412,12 @@ export default function Chefs() {
                         lastname: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
-                  />
-                </div>
-
-                <div className="form-group col-md-12">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="number"
-                    value={selectedchef.number}
-                    onChange={(event) => {
-                      setselectedchef((prev) => ({
-                        ...prev,
-                        number: event.target.value,
-                      }));
-                    }}
-                    placeholder="FirstName *"
+                    placeholder="LastName *"
                   />
                 </div>
                 <div className="form-group col-md-12">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     id="email"
                     value={selectedchef.email}
@@ -317,23 +427,37 @@ export default function Chefs() {
                         email: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
+                    placeholder="Email *"
                   />
                 </div>
-
                 <div className="form-group col-md-12">
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
-                    id="specialty"
-                    value={selectedchef.speciality}
+                    id="number"
+                    value={selectedchef.number}
                     onChange={(event) => {
                       setselectedchef((prev) => ({
                         ...prev,
-                        speciality: event.target.value,
+                        number: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
+                    placeholder="Number *"
+                  />
+                </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    value={selectedchef.password}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        email: event.target.value,
+                      }));
+                    }}
+                    placeholder="Password *"
                   />
                 </div>
                 <div className="form-group col-md-12">
@@ -348,9 +472,25 @@ export default function Chefs() {
                         adress: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
+                    placeholder="Adress *"
                   />
                 </div>
+                <div className="form-group col-md-12">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="specialty"
+                    value={selectedchef.speciality}
+                    onChange={(event) => {
+                      setselectedchef((prev) => ({
+                        ...prev,
+                        speciality: event.target.value,
+                      }));
+                    }}
+                    placeholder="Speciality *"
+                  />
+                </div>
+                
                 <div className="form-group col-md-12">
                   <input
                     type="text"
@@ -363,7 +503,7 @@ export default function Chefs() {
                       }));
                     }}
                     id="exprience"
-                    placeholder="FirstName *"
+                    placeholder="Experience *"
                   />
                   <button
                     type="submit"

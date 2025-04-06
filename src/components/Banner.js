@@ -15,10 +15,10 @@ export default function Banner() {
                 creepeth morning</p>
               <div className="banner_btn">
                 <div className="banner_btn_iner">
-                  <a href="#Reservation" className="btn_2">Reservation <img src="img/icon/left_1.svg" alt /></a>
+                  <a href="#Reservation" className="btn_2">Reservation <img src="img/icon/left_1.svg" alt="left" /></a>
                 </div>
                 <a href="https://www.youtube.com/watch?v=pBFQdxA-apI" className="popup-youtube video_popup">
-                  <span><img src="img/icon/play.svg" alt /></span> Watch our story</a>
+                  <span><img src="img/icon/play.svg" alt="iconplay" /></span> Watch our story</a>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React,{  useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { addclient, getAllUsers } from '../services/services';
 export default function AddClient() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -19,8 +20,9 @@ export default function AddClient() {
     const [password,setPassword]=useState("");
     const [adress,setAdress]=useState("");
     const [image,setImage]=useState(null);
-    const addClient = () =>{ 
-        let clients = JSON.parse(localStorage.getItem("clients")|| "[]");
+    const addClient = async(event) =>{ 
+        event.preventDefault();
+        let clients = await getAllUsers();
         console.log("Here firstname",firstname);
         console.log("Here lastname",lastname);
         console.log("Here email",email);
@@ -28,36 +30,27 @@ export default function AddClient() {
         console.log("Here pwd",password);
         console.log("Here adress",adress);
         console.log("Here image",image);
-        let clientsObj ={
+        let clientObj ={
+          client:clients.length+1,
+          image:image,
           firstname:firstname,
           lastname:lastname,
           email:email,
-          number:number,
           password:password,
-          adress:adress,
-          image:image,
-          client:generateId(clients),
-
+          adress:number,
         };
-        clients.push(clientsObj);
-    localStorage.setItem('clients',JSON.stringify(clients));
-    toast.success(" Client "+clientsObj.firstname+" "+clientsObj.lastname +" ,Welcome To Dingo!");
-   }
-   const generateId = (T) =>{
-    let max;
-    if (T.length==0) {
-      max=0;
-    }
-    else{
-      max=T[0].client;
-      for(let i=0; i<T.length;i++){
-        if (T[i].client>max){
-          max= T[i].client;
-        }
-      }
-    }
-    return max +1;
-   }
+       addclient(clientObj)
+             .then((response) => {
+               console.log("client added successfully", response);
+               toast.success("client added successfully! Welcome To Dingo!");
+             })
+             .catch((error) => {
+               console.error("Error adding client", error);
+               toast.error("Error adding client. Please try again.");
+             });
+           console.log("client added successfully", clientObj);
+         };
+ 
   return (
     <div><section className="regervation_part section_padding">
     <div className="container">

@@ -7,7 +7,7 @@ export default function About() {
       <div className="row align-items-center">
         <div className="col-sm-4 col-lg-5 offset-lg-1">
           <div className="about_img">
-            <img src="img/about.png" alt />
+            <img src="img/about.png"  />
           </div>
         </div>
         <div className="col-sm-8 col-lg-4">
@@ -19,7 +19,7 @@ export default function About() {
             <p>May over was. Be signs two. Spirit. Brought said dry own firmament lesser best sixth deep
               abundantly bearing, him, gathering you
               blessed bearing he our position best ticket in month hole deep </p>
-            <a href="#" className="btn_3">Read More <img src="img/icon/left_2.svg" alt /></a>
+            <a href="#" className="btn_3">Read More <img src="img/icon/left_2.svg"  /></a>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import Home from "./components/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
-import { BrowserRouter, Routes, Route , Navigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Signup from "./components/Signup";
 import AddChef from "./components/AddChef";
 import AddClient from "./components/AddClient";
@@ -14,7 +14,7 @@ import Dishes from "./components/Dishes";
 
 function App() {
   return (
-    <BrowserRouter >
+    <BrowserRouter basename="/restau">
       <div className="site-wrap">
         <div className="site-mobile-menu site-navbar-target">
           <div className="site-mobile-menu-header">
@@ -25,21 +25,20 @@ function App() {
           <div className="site-mobile-menu-body" />
         </div>
         <Header />
-        <Routes >
-          <Route path="/restau" element={<Home />} />
-          <Route path="/restau/signin" element={<Login />} />
-          <Route path="/restau/signup" element={<Signup />} />
-          <Route path="/restau/addchef" element={<AddChef />} />
-          <Route path="/restau/addclient" element={<AddClient />} />
-          <Route path="/restau/adddish" element={<AddDish />} />
-          <Route path="/restau/chefs" element={<Chefs />} />
-          <Route path="/restau/clients" element={<Clients />} />
-          <Route path="/restau/dishes" element={<Dishes/>} />
-          <Route path="/restau/login" element={<Login/>} />  
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signin" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/addchef" element={<AddChef />} />
+          <Route path="/addclient" element={<AddClient />} />
+          <Route path="/adddish" element={<AddDish />} />
+          <Route path="/chefs" element={<Chefs />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/dishes" element={<Dishes />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
-        
         <Footer />
-        </div>
+      </div>
     </BrowserRouter>
   );
 }

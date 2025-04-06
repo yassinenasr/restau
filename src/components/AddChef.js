@@ -1,7 +1,7 @@
 import React,{  useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import {addchef,getAllChefs} from "../services/services";
 export default function AddChef() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -22,8 +22,9 @@ export default function AddChef() {
     const [speciality,setSpecialty]=useState("");
     const [exprience,setExprience]=useState("");
     const [image,setImage]=useState(null);
-    const AddChef = () =>{ 
-        let chefs = JSON.parse(localStorage.getItem("chefs")|| "[]");
+    const  AddChef = async (event) =>{ 
+        event.preventDefault();
+        let chefs = await getAllChefs();
         console.log("Here firstname",firstname);
         console.log("Here lastname",lastname);
         console.log("Here email",email);
@@ -34,38 +35,28 @@ export default function AddChef() {
         console.log("Here exprience",exprience);
         console.log("Here image",image);
         let chefObj ={
-          firstname:firstname,
-          lastname:lastname,
-          email:email,
-          number:number,
-          password:password,
-          adress:adress,
-          speciality:speciality,
-          exprience:exprience,
+          chef:chefs.length + 1,
           image:image,
-          chef:generateId(chefs),
-          
-
+          FirstName:firstname,
+          LastName:lastname,
+          Email:email,
+          Tel:number,
+          Password:password,
+          Adress:adress,
+          Speciality:speciality,
+          Exprience:exprience,  
         };
-    chefs.push(chefObj);
-    localStorage.setItem('chefs',JSON.stringify(chefs));
-    toast.success(" Chef "+chefObj.firstname+" "+chefObj.lastname +" ,Welcome To Dingo!");
-   }
-   const generateId = (T) =>{
-    let max;
-    if (T.length==0) {
-      max=0;
-    }
-    else{
-      max=T[0].chef;
-      for(let i=0; i<T.length;i++){
-        if (T[i].chef>max){
-          max= T[i].chef;
-        }
-      }
-    }
-    return max +1;
-   }
+    addchef(chefObj)
+          .then((response) => {
+            console.log("chef added successfully", response);
+            toast.success("chef added successfully! Welcome To Dingo!");
+          })
+          .catch((error) => {
+            console.error("Error adding chef", error);
+            toast.error("Error adding chef. Please try again.");
+          });
+        console.log("chef added successfully", chefObj);
+      };
   return (
     <div><section className="regervation_part section_padding ">
     <div className="container">
@@ -83,37 +74,37 @@ export default function AddChef() {
             <form>
               <div className="form-row">
                 <div className="form-group col-md-6">
-                  <input type="email" className="form-control" id="inputEmail4" onChange={(event) => {setFirstname(event.target.value)}} placeholder="FirstName *" />
+                  <input type="email" className="form-control" id="txt" onChange={(event) => {setFirstname(event.target.value)}} placeholder="FirstName *" />
                 </div>
                 <div className="form-group col-md-6">
-                  <input type="email" className="form-control" id="inputPassword4" onChange={(event) => {setLastname(event.target.value)}} placeholder="LastName *" />
+                  <input type="email" className="form-control" id="txtt" onChange={(event) => {setLastname(event.target.value)}} placeholder="LastName *" />
                 </div>
                 <div className="form-group col-md-6">
-                  <input type="email" className="form-control" id="inputPassword4" onChange={(event) => {setEmail(event.target.value)}} placeholder="Email *" />
+                  <input type="email" className="form-control" id="mail" onChange={(event) => {setEmail(event.target.value)}} placeholder="Email *" />
                 </div>
                 <div className="form-group col-md-6">
-                  <input type="text" className="form-control" id="pnone" onChange={(event) => {setNumber(event.target.value)}} placeholder="Phone number *" />
+                  <input type="number" className="form-control" id="num" onChange={(event) => {setNumber(event.target.value)}} placeholder="Phone number *" />
                 </div>
                 <div className="form-group col-md-6">
               
-                  <input type="password" className="form-control" id="inputPassword4" onChange={(event) => {setPassword(event.target.value)}} placeholder="Password *" />
+                  <input type="password" className="form-control" id="pwd" onChange={(event) => {setPassword(event.target.value)}} placeholder="Password *" />
                
                 </div>
                 <div className="form-group col-md-6">
                 
-                  <input type="text" className="form-control" id="pnone" onChange={(event) => {setAdress(event.target.value)}} placeholder="Adress *" />
+                  <input type="text" className="form-control" id="adress" onChange={(event) => {setAdress(event.target.value)}} placeholder="Adress *" />
                 
                 </div>
                 
               
               <div className="form-group col-md-6">
               
-                  <input type="text" className="form-control" onChange={(event) => {setSpecialty(event.target.value)}} id="inputPassword4" placeholder="Speciality *" />
+                  <input type="text" className="form-control" onChange={(event) => {setSpecialty(event.target.value)}} id="spec" placeholder="Speciality *" />
                
                 </div>
                 <div className="form-group col-md-6">
                 
-                  <input type="text" className="form-control" onChange={(event) => {setExprience(event.target.value)}} id="pnone" placeholder="Experience *" />
+                  <input type="text" className="form-control" onChange={(event) => {setExprience(event.target.value)}} id="exp" placeholder="Experience *" />
                 
                 </div>
                 </div>
@@ -123,7 +114,7 @@ export default function AddChef() {
                 
                 </div>
               <div className="regerv_btn">
-                <a href="#" onClick={AddChef }  className="btn_4">Add Chef ☺ </a>
+                <a href="#" onClick={AddChef}  className="btn_4">Add Chef ☺ </a>
               </div>
             </form>
           </div>

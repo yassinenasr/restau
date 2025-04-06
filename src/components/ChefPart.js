@@ -16,14 +16,14 @@ export default function ChefPart() {
         <div className="col-sm-6 col-lg-4">
           <div className="single_blog_item">
             <div className="single_blog_img">
-              <img src="img/team/chefs_1.png" alt />
+              <img src="img/team/chefs_1.png"  />
             </div>
             <div className="single_blog_text text-center">
               <h3>Adam Billiard</h3>
               <p>Chef Master</p>
               <div className="social_icon">
                 <a href="#"> <i className="ti-facebook" /> </a>
-                <a href="#"> <i className="ti-twitter-alt" /> </a>
+                <a href="#"> <i className="ti-twitter-" /> </a>
                 <a href="#"> <i className="ti-instagram" /> </a>
                 <a href="#"> <i className="ti-skype" /> </a>
               </div>
@@ -33,14 +33,14 @@ export default function ChefPart() {
         <div className="col-sm-6 col-lg-4">
           <div className="single_blog_item">
             <div className="single_blog_img">
-              <img src="img/team/chefs_2.png" alt />
+              <img src="img/team/chefs_2.png"  />
             </div>
             <div className="single_blog_text text-center">
               <h3>Fred Macyard</h3>
               <p>Chef Master</p>
               <div className="social_icon">
                 <a href="#"> <i className="ti-facebook" /> </a>
-                <a href="#"> <i className="ti-twitter-alt" /> </a>
+                <a href="#"> <i className="ti-twitter-" /> </a>
                 <a href="#"> <i className="ti-instagram" /> </a>
                 <a href="#"> <i className="ti-skype" /> </a>
               </div>
@@ -50,14 +50,14 @@ export default function ChefPart() {
         <div className="col-sm-6 col-lg-4">
           <div className="single_blog_item">
             <div className="single_blog_img">
-              <img src="img/team/chefs_3.png" alt />
+              <img src="img/team/chefs_3.png"  />
             </div>
             <div className="single_blog_text text-center">
               <h3>Justin Stuard</h3>
               <p>Chef Master</p>
               <div className="social_icon">
                 <a href="#"> <i className="ti-facebook" /> </a>
-                <a href="#"> <i className="ti-twitter-alt" /> </a>
+                <a href="#"> <i className="ti-twitter-" /> </a>
                 <a href="#"> <i className="ti-instagram" /> </a>
                 <a href="#"> <i className="ti-skype" /> </a>
               </div>
@@ -67,14 +67,14 @@ export default function ChefPart() {
         <div className="col-sm-6 col-lg-4 d-none d-sm-block d-lg-none">
           <div className="single_blog_item">
             <div className="single_blog_img">
-              <img src="img/team/chefs_1.png" alt />
+              <img src="img/team/chefs_1.png"  />
             </div>
             <div className="single_blog_text text-center">
               <h3>Justin Stuard</h3>
               <p>Chef Master</p>
               <div className="social_icon">
                 <a href="#"> <i className="ti-facebook" /> </a>
-                <a href="#"> <i className="ti-twitter-alt" /> </a>
+                <a href="#"> <i className="ti-twitter-" /> </a>
                 <a href="#"> <i className="ti-instagram" /> </a>
                 <a href="#"> <i className="ti-skype" /> </a>
               </div>

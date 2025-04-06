@@ -5,9 +5,9 @@ import {
   getplatbyid,
   deleteAllPlats,
   deleteplatbyid,
+  searchForDish,
 } from "../services/services";
 Modal.setAppElement("#root");
-
 
 export default function Dishes() {
   const customStyles = {
@@ -27,42 +27,53 @@ export default function Dishes() {
   const [deleteIsOpen, setdeleteIsOpen] = useState(false);
   const [deleteEIsOpen, setdeleteEIsOpen] = useState(false);
   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
- 
+async function search(value) {
+      try {
+          let filtredDishes= await searchForDish(value);
+          setDishes(filtredDishes);
+      } catch (error) {
+        console.error("Error deleting Dishes:", error);
+      }
+    }
   function openModifyModal(dish) {
     setselecteddish(dish);
     setmodifyIsOpen(true);
   }
   function openModalDe(dish) {
-    setselecteddish(dish)
+    setselecteddish(dish);
     setdeleteEIsOpen(true);
   }
   function closeModalDe() {
     setdeleteEIsOpen(false);
   }
-async function deletebyid(event) {
-  try {
-    event.preventDefault();
-    const updatedDishes = dishes.filter(dish => dish.id !== selecteddish.id);
-    await deleteplatbyid(selecteddish.id);
-    console.log("Here is the new Dishes tab", updatedDishes);
-    setDishes(updatedDishes);
-    setdeleteEIsOpen(false);
-  } catch (error) {
-    console.error("Error deleting dish by id:", error);
+  async function deletebyid(event) {
+    try {
+      event.preventDefault();
+      const updatedDishes = dishes.filter(
+        (dish) => dish.id !== selecteddish.id
+      );
+      await deleteplatbyid(selecteddish.id);
+      console.log("Here is the new Dishes tab", updatedDishes);
+      setDishes(updatedDishes);
+      setdeleteEIsOpen(false);
+    } catch (error) {
+      console.error("Error deleting dish by id:", error);
+    }
   }
-}
-async function deletebyid(event) {
-  try {
-    event.preventDefault();
-    const updatedDishes = dishes.filter(dish => dish.id !== selecteddish.id);
-    await deleteplatbyid(selecteddish.id);
-    console.log("Here is the new Dishes tab", updatedDishes);
-    setDishes(updatedDishes);
-    setdeleteEIsOpen(false);
-  } catch (error) {
-    console.error("Error deleting dish by id:", error);
+  async function deletebyid(event) {
+    try {
+      event.preventDefault();
+      const updatedDishes = dishes.filter(
+        (dish) => dish.id !== selecteddish.id
+      );
+      await deleteplatbyid(selecteddish.id);
+      console.log("Here is the new Dishes tab", updatedDishes);
+      setDishes(updatedDishes);
+      setdeleteEIsOpen(false);
+    } catch (error) {
+      console.error("Error deleting dish by id:", error);
+    }
   }
-}
 
   async function deleteAllDishes(event) {
     console.log("Deleting all dishes...");
@@ -162,9 +173,10 @@ async function deletebyid(event) {
                     placeholder="Search..."
                     aria-label="Search"
                     id="searchInput"
-                    
-              
-                    
+                    onChange  ={(event) => {
+                      const searchTerm = event.target.value.toLowerCase();
+                      search(searchTerm);
+                    }}
                   />
                   <button
                     type="reset"
@@ -182,24 +194,22 @@ async function deletebyid(event) {
             <table className="table custom-table">
               <thead>
                 <tr>
-                  <th>Dish</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Description</th>
                   <th>price</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {dishes.map((value, key) => (
                   <tr key={key}>
-                    <td>{value.id}</td>
                     <td>
                       <img
                         src={value.pic}
-                        height={"35px"}
-                        alt={"image" + key}
-                      ></img>
+                        height="35px"
+                        alt={`image-${key}`}
+                      />
                     </td>
                     <td>{value.name}</td>
                     <td>{value.description}</td>
@@ -210,7 +220,7 @@ async function deletebyid(event) {
                         <button
                           type="reset"
                           className="cancelbtn btn btn-danger mr-1  "
-                          onClick={()=>openModalDe(value)}
+                          onClick={() => openModalDe(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -314,7 +324,6 @@ async function deletebyid(event) {
               <div className="single_blog_text text-center">
                 <h3>Are you sure you want to delete all dishes ?</h3>
                 <button
-
                   className="cancelbtn btn btn-success text-white mt-3 mr-3"
                   onClick={deleteAllDishes}
                 >
@@ -387,7 +396,7 @@ async function deletebyid(event) {
                         name: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
+                    placeholder="Name *"
                   />
                 </div>
                 <div className="form-group col-md-12">
@@ -402,7 +411,7 @@ async function deletebyid(event) {
                         description: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
+                    placeholder="Description *"
                   />
                 </div>
 
@@ -418,7 +427,7 @@ async function deletebyid(event) {
                         price: event.target.value,
                       }));
                     }}
-                    placeholder="FirstName *"
+                    placeholder="Price *"
                   />
                 </div>
 

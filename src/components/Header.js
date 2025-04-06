@@ -14,28 +14,28 @@ export default function Header() {
             <div className="collapse navbar-collapse main-menu-item justify-content-end" id="navbarSupportedContent">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                <NavLink to="/restau" className="nav-link" >Home</NavLink>
+                <NavLink to="/" className="nav-link" >Home</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/chefs" className="nav-link" >Chefs</NavLink>
+                <NavLink to="/chefs" className="nav-link" >Chefs</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/clients" className="nav-link" >Clients</NavLink>
+                <NavLink to="/clients" className="nav-link" >Clients</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/dishes" className="nav-link" >Dishes</NavLink>
+                <NavLink to="/dishes" className="nav-link" >Dishes</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/addchef" className="nav-link" >AddChef</NavLink>
+                <NavLink to="/addchef" className="nav-link" >AddChef</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/addclient" className="nav-link" >AddClient</NavLink>
+                <NavLink to="/addclient" className="nav-link" >AddClient</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/adddish" className="nav-link" >AddDish</NavLink>
+                <NavLink to="/adddish" className="nav-link" >AddDish</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/restau/login" className="nav-link" >Login</NavLink>
+                <NavLink to="/login" className="nav-link" >Login</NavLink>
                 </li>
               </ul>
             </div>
