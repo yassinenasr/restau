@@ -5,6 +5,8 @@ import {
   deleteAllChefs,
   deletechefbyid,
   searchForChef,
+  getchefbyid,
+  modifychefbyid,
 } from "../services/services";
 const customStyles = {
   content: {
@@ -44,10 +46,7 @@ export default function Chefs() {
         console.error("Error deleting Clients:", error);
       }
     }
-  function openModifyModal(chef) {
-    setselectedchef(chef);
-    setmodifyIsOpen(true);
-  }
+  
   async function deleteAllChef(event) {
     console.log("Deleting all dishes...");
     try {
@@ -80,17 +79,37 @@ export default function Chefs() {
   function closeModalDe() {
     setdeleteEIsOpen(false);
   }
-  function Modify(chef) {
-    let chefsTab = JSON.parse(localStorage.getItem("chefs") || "[]");
+  
 
-    chefsTab = chefsTab.map((object) => {
-      if (object.chef === chef.chef) {
-        return chef;
-      }
-      return object;
-    });
 
-    localStorage.setItem("chefs", JSON.stringify(chefsTab));
+
+
+
+const getModifPlat = async (id) => {
+    try {
+      let chef = await getchefbyid(id);
+      console.log("Modified chef result", chef);
+      setselectedchef(chef);
+    } catch (error) {
+      console.error("Error fetching chefs:", error);
+    }
+  };
+const Modify = async (chef) => {
+  await modifychefbyid(chef.id, chef);
+  console.log("Here is the new chefs tab", chef);
+  const updatedChefs = chefs.map((chef) =>
+    chef.chef === selectedchef.chef ? selectedchef : chef
+  );
+  setChefs(updatedChefs);
+  setmodifyIsOpen(false);
+  console.log("Here is the new Chefs tab", updatedChefs);
+  setLoadData(false);
+
+}
+
+  function openModifyModal(id) {
+    getModifPlat(id);
+    setmodifyIsOpen(true);
   }
   function closeModifyModal() {
     setmodifyIsOpen(false);

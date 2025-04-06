@@ -22,7 +22,7 @@ const plats = [
     description: "fine",
     price: 10,
   },
-  {
+  {             
     id: 2,
     pic: "assets/pics/burgermaison.jpg",
     name: "Burger Maison",
@@ -88,8 +88,9 @@ app.delete("/plats/:id", (req, res) => {
 app.put("/plats/:id", (req, res) => {
   let platid = req.params.id;
   let foundplat = plats.find((obj) => obj.id == platid);
-  foundplat.prix = req.body.prix;
-  res.json({ msg: "prix updated" });
+  foundplat.price = req.body.price;
+  foundplat.name = req.body.name;
+  foundplat.description = req.body.description;
 });
 //Business logic:add plat
 app.post("/plats", (req, res) => {
@@ -126,6 +127,17 @@ const users = [
     adress: 25123123,
   },
 ];
+//Business logic : modify user by ID
+app.put("/users/:id", (req, res) => {
+  let id = req.params.client;
+  let founduser = users.find((obj) => obj.client == id);
+  founduser.firstname = req.body.firstname;
+  founduser.lastname = req.body.lastname;
+  founduser.email = req.body.email;
+  founduser.password = req.body.password;
+  founduser.adress = req.body.adress;
+  res.json({ msg: "user updated" });
+}); 
 //Business logic : search user by tel
 app.get("/users/search", (req, res) => {
   let search = req.query.search.toLowerCase();
@@ -208,6 +220,7 @@ app.get("/orders/sum/:platid", (req, res) => {
     .reduce((a, b) => a + b, 0);
   res.json({ sum: sum });
 });
+//busi
 const chefs = [
   {
     chef: "1",

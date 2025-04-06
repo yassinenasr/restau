@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { getAllUsers, searchForUser } from "../services/services";
+import { getAllUsers, getuserbyid, modifyuserbyid, searchForUser } from "../services/services";
 import { deleteAllUsers, deleteuserbyid } from "../services/services";
 export default function Clients() {
   const customStyles = {
@@ -15,6 +15,8 @@ export default function Clients() {
   };
   const [deleteIsOpen, setdeleteIsOpen] = useState(false);
   const [deleteEIsOpen, setdeleteEIsOpen] = useState(false);
+  const [modifiedclient, setmodifiedclient] = useState({});
+  
   const [clients, setClients] = useState([]);
   const [loadData, setLoadData] = useState(false);
   const [selectedclient, setselectedclient] = useState({});
@@ -26,26 +28,71 @@ export default function Clients() {
   function closeModalD() {
     setdeleteIsOpen(false);
   }
-  function openModifyModal(client) {
-    setselectedclient(client);
+
+
+
+
+
+
+
+
+  const getModifClient = async (id) => {
+    try {
+      const client = await getuserbyid(id);
+      console.log("Here is the client", client);
+      setmodifiedclient(client);
+
+    }
+    catch (error) {
+      console.error("Error fetching client:", error);
+    }}
+  
+   const Modify = async (user) => {
+    try {
+      await modifyuserbyid(user.id, user);
+      console.log("User successfully modified:", user);
+  
+      const updatedClients = clients.map((client) =>
+        client.id === user.id ? user : client
+      );
+  
+      setClients(updatedClients);
+      setmodifyIsOpen(false);
+      setLoadData(false);
+  
+      console.log("Updated clients list:", updatedClients);
+    } catch (error) {
+      console.error("Error modifying user:", error);
+    }
+  };
+  
+  function openModifyModal(id) {
+    getModifClient(id);
     setmodifyIsOpen(true);
   }
-
-  function Modify(client) {
-    let clientsTab = JSON.parse(localStorage.getItem("clients") || "[]");
-
-    clientsTab = clientsTab.map((object) => {
-      if (object.client === client.client) {
-        return client;
-      }
-      return object;
-    });
-
-    localStorage.setItem("clients", JSON.stringify(clientsTab));
-  }
+  
   function closeModifyModal() {
     setmodifyIsOpen(false);
   }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   function openModal(client) {
     setselectedclient(client);
     setIsOpen(true);
@@ -374,9 +421,9 @@ export default function Clients() {
                     type="text"
                     className="form-control"
                     id="firstname"
-                    value={selectedclient.firstname}
+                    value={modifiedclient.firstname}
                     onChange={(event) => {
-                      setselectedclient((prev) => ({
+                      setmodifiedclient((prev) => ({
                         ...prev,
                         firstname: event.target.value,
                       }));
@@ -389,9 +436,9 @@ export default function Clients() {
                     type="text"
                     className="form-control"
                     id="lastname"
-                    value={selectedclient.lastname}
+                    value={modifiedclient.lastname}
                     onChange={(event) => {
-                      setselectedclient((prev) => ({
+                      setmodifiedclient((prev) => ({
                         ...prev,
                         lastname: event.target.value,
                       }));
@@ -405,9 +452,9 @@ export default function Clients() {
                     type="text"
                     className="form-control"
                     id="email"
-                    value={selectedclient.email}
+                    value={modifiedclient.email}
                     onChange={(event) => {
-                      setselectedclient((prev) => ({
+                      setmodifiedclient((prev) => ({
                         ...prev,
                         email: event.target.value,
                       }));
@@ -419,10 +466,10 @@ export default function Clients() {
                   <input
                     type="password"
                     className="form-control"
-                    id="email"
-                    value={selectedclient.password}
+                    id="emaisl"
+                    value={modifiedclient.password}
                     onChange={(event) => {
-                      setselectedclient((prev) => ({
+                      setmodifiedclient((prev) => ({
                         ...prev,
                         email: event.target.value,
                       }));
@@ -434,9 +481,9 @@ export default function Clients() {
                   <input
                     type="text"
                     className="form-control"
-                    value={selectedclient.adress}
+                    value={modifiedclient.adress}
                     onChange={(event) => {
-                      setselectedclient((prev) => ({
+                      setmodifiedclient((prev) => ({
                         ...prev,
                         adress: event.target.value,
                       }));
@@ -447,7 +494,7 @@ export default function Clients() {
                   <button
                     type="submit"
                     className="cancelbtn btn btn-success text-white mt-3"
-                    onClick={() => Modify(selectedclient)}
+                    onClick={() => Modify(modifiedclient)}
                   >
                     Apply Your Modification
                   </button>

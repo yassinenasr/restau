@@ -6,6 +6,7 @@ import {
   deleteAllPlats,
   deleteplatbyid,
   searchForDish,
+  modifyplatbyid,
 } from "../services/services";
 Modal.setAppElement("#root");
 
@@ -23,10 +24,12 @@ export default function Dishes() {
   const [dishes, setDishes] = useState([]);
   const [loadData, setLoadData] = useState(false);
   const [selecteddish, setselecteddish] = useState({});
+  const [modifieddish, setmodifieddish] = useState({});
   const [modalIsOpen, setIsOpen] = useState(false);
   const [deleteIsOpen, setdeleteIsOpen] = useState(false);
   const [deleteEIsOpen, setdeleteEIsOpen] = useState(false);
   const [modifyIsOpen, setmodifyIsOpen] = useState(false);
+
 async function search(value) {
       try {
           let filtredDishes= await searchForDish(value);
@@ -35,10 +38,7 @@ async function search(value) {
         console.error("Error deleting Dishes:", error);
       }
     }
-  function openModifyModal(dish) {
-    setselecteddish(dish);
-    setmodifyIsOpen(true);
-  }
+  
   function openModalDe(dish) {
     setselecteddish(dish);
     setdeleteEIsOpen(true);
@@ -87,21 +87,47 @@ async function search(value) {
     }
   }
 
-  function Modify(dish) {
-    let dishesTab = getAllPlats();
-    console.log("Here dishes tab", dishesTab);
-    dishesTab = dishesTab.map((object) => {
-      if (object.dish === dish.dish) {
-        return dish;
-      }
-      return object;
-    });
 
-    localStorage.setItem("dishes", JSON.stringify(dishesTab));
-  }
+
+
+
+
+  const getModifPlat = async (id) => {
+    try {
+      let dish = await getplatbyid(id);
+      console.log("Modified dish result", dish);
+      setmodifieddish(dish);
+    } catch (error) {
+      console.error("Error fetching dishes:", error);
+    }
+  };
   function closeModifyModal() {
     setmodifyIsOpen(false);
   }
+  function openModifyModal(id) {
+    getModifPlat(id);
+    setmodifyIsOpen(true);
+  }
+const Modify = async (plat) => {
+  await modifyplatbyid(plat.id, plat);
+  console.log("Here is the new Dishes tab", plat);
+  const updatedDishes = dishes.map((dish) =>
+    dish.id === plat.id ? plat : dish
+  );
+  setDishes(updatedDishes);
+  setmodifyIsOpen(false);
+  console.log("Here is the new Dishes tab", updatedDishes);
+  setLoadData(false);
+
+}
+
+
+
+
+
+
+
+
 
   const fetchDisheById = async (id) => {
     console.log("Getting dish with id " + id + " from backend...");
@@ -237,7 +263,7 @@ async function search(value) {
                         <button
                           type="reset"
                           className="cancelbtn btn btn-info  mr-1 "
-                          onClick={() => openModifyModal(value)}
+                          onClick={() => openModifyModal(value.id)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -389,9 +415,9 @@ async function search(value) {
                     type="text"
                     className="form-control"
                     id="firstname"
-                    value={selecteddish.name}
+                    value={modifieddish.name}
                     onChange={(event) => {
-                      setselecteddish((prev) => ({
+                      setmodifieddish((prev) => ({
                         ...prev,
                         name: event.target.value,
                       }));
@@ -404,9 +430,9 @@ async function search(value) {
                     type="text"
                     className="form-control"
                     id="lastname"
-                    value={selecteddish.description}
+                    value={modifieddish.description}
                     onChange={(event) => {
-                      setselecteddish((prev) => ({
+                      setmodifieddish((prev) => ({
                         ...prev,
                         description: event.target.value,
                       }));
@@ -420,9 +446,9 @@ async function search(value) {
                     type="text"
                     className="form-control"
                     id="email"
-                    value={selecteddish.price}
+                    value={modifieddish.price}
                     onChange={(event) => {
-                      setselecteddish((prev) => ({
+                      setmodifieddish((prev) => ({
                         ...prev,
                         price: event.target.value,
                       }));
@@ -435,7 +461,7 @@ async function search(value) {
                   <button
                     type="submit"
                     className="cancelbtn btn btn-success text-white mt-3"
-                    onClick={() => Modify(selecteddish)}
+                    onClick={() => Modify(modifieddish)}
                   >
                     Apply Your Modification
                   </button>

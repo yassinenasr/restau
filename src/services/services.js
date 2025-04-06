@@ -1,4 +1,4 @@
-import {getRequest ,deleteRequest, postRequest} from './client';
+import {getRequest ,deleteRequest, postRequest, putRequest} from './client';
 
 const USER_URL = '/users';
 const Chef_URL = '/chefs';
@@ -22,7 +22,7 @@ export const deleteplatbyid = async(platid) => {
   return await deleteRequest(APIS_URL+PLAT_URL+'/'+platid).then((response) => response.plat);
 }
 export const modifyplatbyid = async(platid,plat) => {
-  return await deleteRequest(APIS_URL+PLAT_URL+'/'+platid,plat).then((response) => response.plat);
+  return await putRequest(APIS_URL+PLAT_URL+'/'+platid,plat).then((response) => response.plat);
 }
 export const searchplat = async (search) => {
   return await getRequest(APIS_URL+PLAT_URL+'/search?search='+search).then((response) => response.plats);
@@ -49,8 +49,8 @@ export const deleteAllUsers = async () => {
 export const deleteuserbyid = async(userid) => {
   return await deleteRequest(APIS_URL+USER_URL+'/'+userid).then((response) => response.user);
 }
-export const modifyuserbyid = async(userid,user) => {
-  return await deleteRequest(APIS_URL+USER_URL+'/'+userid,user).then((response) => response.user);
+export  const modifyuserbyid = async(userid,user) => {
+  return await putRequest(APIS_URL+USER_URL+'/'+userid,user).then((response) => response.user);
 }
 export const addclient = async (user) => {
   return await postRequest(APIS_URL+USER_URL,user).then((response) => response.user);
@@ -85,7 +85,7 @@ export const deletechefbyid = async(chefid) => {
   return await deleteRequest(APIS_URL+Chef_URL+'/'+chefid).then((response) => response.chef);
 }
 export const modifychefbyid = async(chefid,chef) => {
-  return await deleteRequest(APIS_URL+Chef_URL+'/'+chefid,chef).then((response) => response.chef);
+  return await putRequest(APIS_URL+Chef_URL+'/'+chefid,chef).then((response) => response.chef);
 }
 export const addchef = async (chef) => {
   return await postRequest(APIS_URL+Chef_URL,chef).then((response) => response.chef);
