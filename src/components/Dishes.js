@@ -110,7 +110,6 @@ async function search(value) {
   }
 const Modify = async (plat) => {
   await modifyplatbyid(plat.id, plat);
-  console.log("Here is the new Dishes tab", plat);
   const updatedDishes = dishes.map((dish) =>
     dish.id === plat.id ? plat : dish
   );
@@ -459,7 +458,7 @@ const Modify = async (plat) => {
 
                 <div className="form-group col-md-12">
                   <button
-                    type="submit"
+                    type="button"
                     className="cancelbtn btn btn-success text-white mt-3"
                     onClick={() => Modify(modifieddish)}
                   >

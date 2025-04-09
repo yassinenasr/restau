@@ -49,9 +49,7 @@ export default function Clients() {
   
    const Modify = async (user) => {
     try {
-      await modifyuserbyid(user.id, user);
-      console.log("User successfully modified:", user);
-  
+      await modifyuserbyid(user.id, user);  
       const updatedClients = clients.map((client) =>
         client.id === user.id ? user : client
       );
@@ -131,19 +129,7 @@ export default function Clients() {
     console.log("Clients updated:", clients);
     localStorage.setItem("clients", JSON.stringify(clients));
   }, [clients]);
-  const deleteClient = (client) => {
-    console.log("Here Selected Client", client);
-    for (let i = 0; clients.length > i; i++) {
-      if (clients[i].client === client) {
-        clients.splice(i, 1);
-        break;
-      }
-    }
 
-    localStorage.setItem("clients", JSON.stringify(clients));
-    setClients(clients);
-    setLoadData(false);
-  };
   async function deleteAllClients(event) {
     console.log("Deleting all dishes...");
     try {
@@ -269,7 +255,7 @@ export default function Clients() {
                         <button
                           type="reset"
                           className="cancelbtn btn btn-info  mr-1 "
-                          onClick={() => openModifyModal(value)}
+                          onClick={() => openModifyModal(value.id)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -492,7 +478,7 @@ export default function Clients() {
                     placeholder="Adress *"
                   />
                   <button
-                    type="submit"
+                    type="button"
                     className="cancelbtn btn btn-success text-white mt-3"
                     onClick={() => Modify(modifiedclient)}
                   >

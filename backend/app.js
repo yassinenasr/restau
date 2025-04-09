@@ -100,7 +100,7 @@ app.post("/plats", (req, res) => {
 });
 const users = [
   {
-    client: 1,
+    id: 1,
     image: "assets/pics/ab.jpg",
     firstname: "ali",
     lastname: "badra",
@@ -109,7 +109,7 @@ const users = [
     adress: 24600900,
   },
   {
-    client: 6,
+    id: 6,
     image: "assets/pics/mf.jpg",
     firstname: "mohamed",
     lastname: "frikha",
@@ -118,7 +118,7 @@ const users = [
     adress: 23129129,
   },
   {
-    client: 5,
+    id: 5,
     image: "assets/pics/kk.jpg",
     firstname: "karim",
     lastname: "khemiri",
@@ -127,10 +127,15 @@ const users = [
     adress: 25123123,
   },
 ];
+app.get("/users/:id", (req, res) => {
+  let userid = req.params.id;
+  let result = users.find((obj) => obj.id === userid);
+  res.json({ user: result });
+});
 //Business logic : modify user by ID
 app.put("/users/:id", (req, res) => {
-  let id = req.params.client;
-  let founduser = users.find((obj) => obj.client == id);
+  let id = req.params.id;
+  let founduser = users.find((obj) => obj.id === id);
   founduser.firstname = req.body.firstname;
   founduser.lastname = req.body.lastname;
   founduser.email = req.body.email;
@@ -223,7 +228,7 @@ app.get("/orders/sum/:platid", (req, res) => {
 //busi
 const chefs = [
   {
-    chef: "1",
+    id: "1",
     image: "assets/pics/chefs1.jpg",
     FirstName: "Ali",
     LastName: "dridri",
@@ -235,7 +240,7 @@ const chefs = [
     Exprience: "5 years",
   },
   {
-    chef: "2",
+    id: "2",
     image: "assets/pics/chefs2.jpg",
     FirstName: "Ammar",
     LastName: "zakkar",
@@ -247,7 +252,7 @@ const chefs = [
     Exprience: "0.5 years",
   },
   {
-    chef: "3",
+    id: "3",
     image: "assets/pics/chefs3.jpg",
     FirstName: "Antar",
     LastName: "darbouka",
@@ -266,7 +271,7 @@ app.get("/chefs", (req, res) => {
 //Business logic : delete chef by ID
 app.delete("/chefs/:id", (req, res) => {
   let id = req.params.id;
-  let foundchef = chefs.find((obj) => obj.chef == id);
+  let foundchef = chefs.find((obj) => obj.id === id);
   let index = chefs.indexOf(foundchef);
   chefs.splice(index, 1);
   res.json({ msg: "chef deleted" });
@@ -314,7 +319,7 @@ app.get("/chefs/search", (req, res) => {
 //Business logic : update chef by ID
 app.put("/chefs/:id", (req, res) => {
   let id = req.params.id;
-  let foundchef = chefs.find((obj) => obj.chef == id);
+  let foundchef = chefs.find((obj) => obj.id === id);
   foundchef.FirstName = req.body.FirstName;
   foundchef.LastName = req.body.LastName;
   foundchef.Email = req.body.Email;
@@ -328,7 +333,7 @@ app.put("/chefs/:id", (req, res) => {
 //Business logic : get chef by ID
 app.get("/chefs/:id", (req, res) => {
   let id = req.params.id;
-  let foundchef = chefs.find((obj) => obj.chef == id);
+  let foundchef = chefs.find((obj) => obj.id === id);
   res.json({ chef: foundchef });
 });
 //business logic : delete all chefs
