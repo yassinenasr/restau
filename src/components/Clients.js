@@ -145,10 +145,11 @@ export default function Clients() {
   async function deletebyid(event) {
     try {
       event.preventDefault();
+      await deleteuserbyid(selectedclient.firstname);
+      console.log("Deleting client with id:", selectedclient);
       const updatedClients = clients.filter(
         (client) => client.id !== selectedclient.id
       );
-      await deleteuserbyid(selectedclient.id);
       console.log("Here is the new Clients tab", updatedClients);
       setClients(updatedClients);
       setdeleteEIsOpen(false);
@@ -238,7 +239,7 @@ export default function Clients() {
                         <button
                           type="reset"
                           className="cancelbtn btn btn-danger mr-1  "
-                          onClick={openModalDe}
+                          onClick={()=>openModalDe(value)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -452,12 +453,12 @@ export default function Clients() {
                   <input
                     type="password"
                     className="form-control"
-                    id="emaisl"
+                    id="password"
                     value={modifiedclient.password}
                     onChange={(event) => {
                       setmodifiedclient((prev) => ({
                         ...prev,
-                        email: event.target.value,
+                        password: event.target.value,
                       }));
                     }}
                     placeholder="Password *"

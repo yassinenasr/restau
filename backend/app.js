@@ -78,8 +78,8 @@ app.delete("/plats", (req, res) => {
 });
 //Business logic:delete plat by id
 app.delete("/plats/:id", (req, res) => {
-  let platid = req.params.id;
-  let foundplat = plats.find((obj) => obj.id == platid);
+  let platid = parseInt(req.params.id);
+  let foundplat = plats.find((obj) => obj.id === platid);
   let index = plats.indexOf(foundplat);
   plats.splice(index, 1);
   res.json({ msg: "plat deleted" });
@@ -128,13 +128,13 @@ const users = [
   },
 ];
 app.get("/users/:id", (req, res) => {
-  let userid = req.params.id;
+  let userid =  parseInt(req.params.id);
   let result = users.find((obj) => obj.id === userid);
   res.json({ user: result });
 });
 //Business logic : modify user by ID
 app.put("/users/:id", (req, res) => {
-  let id = req.params.id;
+  let id = parseInt(req.params.id);
   let founduser = users.find((obj) => obj.id === id);
   founduser.firstname = req.body.firstname;
   founduser.lastname = req.body.lastname;
@@ -174,9 +174,9 @@ app.get("/users", (req, res) => {
   res.json({ users: users });
 });
 //Business logic: delete user by name
-app.delete("/users/:firstname", (req, res) => {
-  let firstname = req.params.firstname;
-  let founduser = users.find((obj) => obj.firstname == firstname);
+app.delete("/users/:id", (req, res) => {
+  let iduser = req.params.id;
+  let founduser = users.find((obj) => obj.id === iduser);
   let index = users.indexOf(founduser);
   users.splice(index, 1);
   res.json({ msg: "user deleted" });
