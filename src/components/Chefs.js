@@ -23,6 +23,7 @@ export default function Chefs() {
   const [chefs, setChefs] = useState([]);
   const [loadData, setLoadData] = useState(false);
   const [selectedchef, setselectedchef] = useState({});
+  const [modifiedchef, setmodifiedchef] = useState({});
   const [deleteIsOpen, setdeleteIsOpen] = useState(false);
   const [deleteEIsOpen, setdeleteEIsOpen] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -62,9 +63,9 @@ export default function Chefs() {
     try {
       event.preventDefault();
       const updatedChefs = chefs.filter(
-        (chef) => chef.chef !== selectedchef.chef
+        (chef) => chef.id !== selectedchef.id
       );
-      await deletechefbyid(selectedchef.chef);
+      await deletechefbyid(selectedchef.id);
       console.log("Here is the new Dishes tab", updatedChefs);
       setChefs(updatedChefs);
       setdeleteEIsOpen(false);
@@ -85,20 +86,19 @@ export default function Chefs() {
 
 
 
-const getModifPlat = async (id) => {
+const getModifChef = async (id) => {
     try {
       let chef = await getchefbyid(id);
       console.log("Modified chef result", chef);
-      setselectedchef(chef);
+      setmodifiedchef(chef);
     } catch (error) {
       console.error("Error fetching chefs:", error);
     }
   };
 const Modify = async (chef) => {
   await modifychefbyid(chef.id, chef);
-  console.log("Here is the new chefs tab", chef);
   const updatedChefs = chefs.map((chef) =>
-    chef.chef === selectedchef.chef ? selectedchef : chef
+    chef.chef === modifiedchef.chef ? modifiedchef : chef
   );
   setChefs(updatedChefs);
   setmodifyIsOpen(false);
@@ -108,7 +108,7 @@ const Modify = async (chef) => {
 }
 
   function openModifyModal(id) {
-    getModifPlat(id);
+    getModifChef(id);
     setmodifyIsOpen(true);
   }
   function closeModifyModal() {
@@ -124,18 +124,7 @@ const Modify = async (chef) => {
     setIsOpen(false);
   }
 
-  const deleteChef = (chef) => {
-    console.log("Here Selected Dish", chef);
-    for (let i = 0; chefs.length > i; i++) {
-      if (chefs[i].chef === chef) {
-        chefs.splice(i, 1);
-        break;
-      }
-    }
-    localStorage.setItem("chefs", JSON.stringify(chefs));
-    setChefs(chefs);
-    setLoadData(false);
-  };
+
   const fetchChefs = async () => {
     console.log("Getting chefs from backend...");
     try {
@@ -256,7 +245,7 @@ const Modify = async (chef) => {
                         <button
                           type="reset"
                           className="cancelbtn btn btn-info  mr-1 "
-                          onClick={() => openModifyModal(value)}
+                          onClick={() => openModifyModal(value.id)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -375,7 +364,7 @@ const Modify = async (chef) => {
                 <img
                   src={selectedchef.image}
                   height={"200px"}
-                  alt={"image"}
+                  alt={"image"+selectedchef.id}
                 ></img>
               </div>
               <div className="single_blog_text text-center">
@@ -408,11 +397,11 @@ const Modify = async (chef) => {
                     type="text"
                     className="form-control"
                     id="firstname"
-                    value={selectedchef.firstname}
+                    value={modifiedchef.FirstName}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        firstname: event.target.value,
+                        FirstName: event.target.value,
                       }));
                     }}
                     placeholder="FirstName *"
@@ -424,11 +413,11 @@ const Modify = async (chef) => {
                     type="text"
                     className="form-control"
                     id="lastname"
-                    value={selectedchef.lastname}
+                    value={modifiedchef.LastName}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        lastname: event.target.value,
+                        LastName: event.target.value,
                       }));
                     }}
                     placeholder="LastName *"
@@ -439,11 +428,11 @@ const Modify = async (chef) => {
                     type="email"
                     className="form-control"
                     id="email"
-                    value={selectedchef.email}
+                    value={modifiedchef.Email}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        email: event.target.value,
+                        Email: event.target.value,
                       }));
                     }}
                     placeholder="Email *"
@@ -454,11 +443,11 @@ const Modify = async (chef) => {
                     type="number"
                     className="form-control"
                     id="number"
-                    value={selectedchef.number}
+                    value={modifiedchef.Tel}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        number: event.target.value,
+                        Tel: event.target.value,
                       }));
                     }}
                     placeholder="Number *"
@@ -469,11 +458,11 @@ const Modify = async (chef) => {
                     type="password"
                     className="form-control"
                     id="password"
-                    value={selectedchef.password}
+                    value={modifiedchef.Password}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        email: event.target.value,
+                        Password: event.target.value,
                       }));
                     }}
                     placeholder="Password *"
@@ -484,11 +473,11 @@ const Modify = async (chef) => {
                     type="text"
                     className="form-control"
                     id="adress"
-                    value={selectedchef.adress}
+                    value={modifiedchef.Adress}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        adress: event.target.value,
+                        Adress: event.target.value,
                       }));
                     }}
                     placeholder="Adress *"
@@ -499,11 +488,11 @@ const Modify = async (chef) => {
                     type="text"
                     className="form-control"
                     id="specialty"
-                    value={selectedchef.speciality}
+                    value={modifiedchef.Speciality}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        speciality: event.target.value,
+                        Speciality: event.target.value,
                       }));
                     }}
                     placeholder="Speciality *"
@@ -514,20 +503,20 @@ const Modify = async (chef) => {
                   <input
                     type="text"
                     className="form-control"
-                    value={selectedchef.exprience}
+                    value={modifiedchef.Exprience}
                     onChange={(event) => {
-                      setselectedchef((prev) => ({
+                      setmodifiedchef((prev) => ({
                         ...prev,
-                        exprience: event.target.value,
+                        Exprience: event.target.value,
                       }));
                     }}
                     id="exprience"
                     placeholder="Experience *"
                   />
                   <button
-                    type="submit"
+                    type="button"
                     className="cancelbtn btn btn-success text-white mt-3"
-                    onClick={() => Modify(selectedchef)}
+                    onClick={() => Modify(modifiedchef)}
                   >
                     Apply Your Modification
                   </button>

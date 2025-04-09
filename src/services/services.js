@@ -75,7 +75,8 @@ export const modifyorderbyid = async(orderid,order) => {
 export const getAllChefs = async () => {
   return await getRequest(APIS_URL+Chef_URL).then((response) => response.chefs);
 }
-export const getchefbyid = async (chefid) => {  
+export const getchefbyid = async (chefid) => {
+  console.log('chefid',chefid)  
   return await getRequest(APIS_URL+Chef_URL+'/'+chefid).then((response) => response.chef);
 }
 export const deleteAllChefs = async () => {
